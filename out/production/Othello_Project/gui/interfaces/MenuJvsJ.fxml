@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPaneJvsJ" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.SousMenuController">
+   <children>
+      <ImageView fx:id="imageViewMenuJvsJ" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../img/menuJvsJ.jpg" />
+         </image>
+      </ImageView>
+      <TextField fx:id="textFieldJ1" layoutX="637.0" layoutY="404.0" prefHeight="62.0" prefWidth="334.0" />
+      <TextField fx:id="textFieldJ2" layoutX="637.0" layoutY="487.0" prefHeight="62.0" prefWidth="334.0" />
+      <Button layoutX="514.0" layoutY="609.0" mnemonicParsing="false" onAction="#handleButtonValidateJvsJAction" prefHeight="68.0" prefWidth="246.0" text="Valider">
+         <font>
+            <Font name="Bell MT" size="43.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonBackArrow" layoutX="34.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleButtonBackArrow2" prefHeight="70.0" prefWidth="76.0" />
+   </children>
+</AnchorPane>
