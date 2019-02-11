@@ -2,6 +2,9 @@
 
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,9 +14,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clickGrid" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clickGrid" prefHeight="748.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.GameController">
    <children>
-        <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <ImageView fitHeight="720.0" fitWidth="1280.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
          <image>
             <Image url="@../../img/gameinterface.jpg" />
          </image>
@@ -21,17 +24,17 @@
             <Rectangle2D />
          </viewport>
       </ImageView>
-      <Text fx:id="labelScoreJ1" fill="WHITE" layoutX="45.0" layoutY="668.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" textAlignment="CENTER" wrappingWidth="47.09962737560272">
+      <Text fx:id="labelScoreJ1" fill="WHITE" layoutX="51.0" layoutY="706.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" textAlignment="CENTER" wrappingWidth="47.09962737560272">
          <font>
             <Font size="40.0" />
          </font>
       </Text>
-      <Text fx:id="labelScoreJ2" fill="WHITE" layoutX="972.0" layoutY="667.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" textAlignment="CENTER" wrappingWidth="47.09962737560272">
+      <Text fx:id="labelScoreJ2" fill="WHITE" layoutX="993.0" layoutY="705.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" textAlignment="CENTER" wrappingWidth="47.09962737560272">
          <font>
             <Font size="40.0" />
          </font>
       </Text>
-      <GridPane fx:id="gridPaneGame" gridLinesVisible="false" layoutX="358.0" layoutY="127.0" prefHeight="563.0" prefWidth="563.0">
+      <GridPane fx:id="gridPaneGame" gridLinesVisible="false" layoutX="358.0" layoutY="153.0" prefHeight="563.0" prefWidth="563.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="72.66665649414062" minWidth="10.0" prefWidth="71.900" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="82.799951171875" minWidth="10.0" prefWidth="71.2" />
@@ -119,15 +122,29 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="7" GridPane.rowIndex="7" />
          </children>
       </GridPane>
-       <Label fx:id="labelJoueur1" layoutX="75.0" layoutY="36.0" text="Joueur 1" textFill="#ba8968">
+       <Label fx:id="labelJoueur1" layoutX="75.0" layoutY="65.0" text="Joueur 1" textFill="#ba8968">
            <font>
                <Font name="Bell MT" size="44.0" />
            </font>
        </Label>
-       <Label fx:id="labelJoueur2" layoutX="843.0" layoutY="36.0" prefHeight="47.0" prefWidth="374.0" text="Joueur 2" textFill="#ba8968">
+       <Label fx:id="labelJoueur2" layoutX="843.0" layoutY="65.0" prefHeight="47.0" prefWidth="374.0" text="Joueur 2" textFill="#ba8968">
            <font>
                <Font name="Bell MT" size="44.0" />
            </font>
        </Label>
+      <MenuBar layoutY="-1.0" prefHeight="28.0" prefWidth="1280.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Fichier">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Enregistrer" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Aide">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#clickRegles" text="Règles du jeu" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
    </children>
 </AnchorPane>

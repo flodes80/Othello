@@ -3,6 +3,10 @@ package gui.controllers;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -25,6 +29,7 @@ public class MainController{
         Scene scene = new Scene(root);
         mainStage.setScene(scene);
         mainStage.setTitle(title);
+        mainStage.getIcons().add(new Image("img/icon.png"));
         mainStageInitialized = true;
     }
 
@@ -40,6 +45,7 @@ public class MainController{
         Scene gameScene = new Scene(root);
         gameStage.setScene(gameScene);
         gameStage.setTitle(title);
+        gameStage.getIcons().add(new Image("img/icon.png"));
         //Afficher le mainStage lorsque l'on quitte une partie
         gameStage.setOnCloseRequest(event -> {
             launchMainStage(null);
