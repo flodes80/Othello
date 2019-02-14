@@ -28,14 +28,16 @@ public class SplashScreenController implements Initializable{
     @FXML
     private ImageView imageViewSplashScreen;
 
+    MenuPrincipalController menuPrincipalController;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             Image image = new Image("/img/splashscreen.jpg");
             imageViewSplashScreen.setImage(image);
-
-            Parent fxml = FXMLLoader.load(getClass().getResource("/gui/interfaces/Menu.fxml"));       //Chargement de la nouvelle page
-            //makeStageDrageable();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/interfaces/Menu.fxml"));
+            Parent fxml = loader.load();
+            menuPrincipalController = loader.getController();
             animationGenerator = new AnimationGenerator();
             animationGenerator.applyFadeAnimationOn02(parent, 500, 0.2, 1, 1, (e2) -> {
             animationGenerator.applyFadeAnimationOn01(parent, 500, 1, 1, 1, (e) -> {
@@ -48,30 +50,9 @@ public class SplashScreenController implements Initializable{
         }
     }
 
-    /*public void makeStageDrageable() {
-        parent.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = event.getSceneX();
-                yOffset = event.getSceneY();
-            }
-        });
-        parent.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Main.stage.setX(event.getScreenX() - xOffset);
-                Main.stage.setY(event.getScreenY() - yOffset);
-                Main.stage.setOpacity(0.7f);
-            }
-        });
-        parent.setOnDragDone((e) -> {
-            Main.stage.setOpacity(1.0f);
-        });
-        parent.setOnMouseReleased((e) -> {
-            Main.stage.setOpacity(1.0f);
-        });
-    }*/
-
+    public MenuPrincipalController getMenuPrincipalController() {
+        return menuPrincipalController;
+    }
 }
 
 

@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import gamestuff.Game;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,61 +14,68 @@ import java.io.IOException;
 
 public class MainController{
 
-    private static Stage mainStage, gameStage;
-    private static boolean mainStageInitialized, gameStageInitialized;
-    private final static String title = "Othello";
+    private Stage mainStage, gameStage;
+    private SplashScreenController splashScreenController;
+    private MenuPrincipalController menuPrincipalController;
+    private SousMenuController sousMenuController;
+    private GameController gameController;
+    private final String title = "Othello";
+    private Game game;
 
-    private static void initializeMainStage(Stage stage){
-        mainStage = stage;
-        FXMLLoader loader = new FXMLLoader(MainController.class.getClass().getResource("/gui/interfaces/SplashScreen.fxml"));
+    public MainController(Stage stage){
+        this.mainStage = stage;
+        //Lancement et initialisation du mainStage (Menu)
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/interfaces/SplashScreen.fxml"));
         Parent root = null;
         try {
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        splashScreenController = loader.getController();
         Scene scene = new Scene(root);
         mainStage.setScene(scene);
         mainStage.setTitle(title);
         mainStage.getIcons().add(new Image("img/icon.png"));
-        mainStageInitialized = true;
+        mainStage.show();
+        menuPrincipalController = splashScreenController.getMenuPrincipalController();
+        menuPrincipalController.setMainController(this);
     }
 
-    private static void initializeGameStage(){
-        FXMLLoader fxmlLoader = new FXMLLoader(MainController.class.getResource("/gui/interfaces/GameInterface.fxml"));
+    public void launchGame(Game game){
+        this.game = game;
+        mainStage.hide();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/interfaces/GameInterface.fxml"));
         Parent root = null;
         try {
             root = fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        gameController = fxmlLoader.getController();
         gameStage = new Stage();
         Scene gameScene = new Scene(root);
         gameStage.setScene(gameScene);
         gameStage.setTitle(title);
         gameStage.getIcons().add(new Image("img/icon.png"));
+
         //Afficher le mainStage lorsque l'on quitte une partie
-        gameStage.setOnCloseRequest(event -> {
-            launchMainStage(null);
-        });
-        gameStageInitialized = true;
-    }
-
-    public static void launchMainStage(Stage stage){
-        //Initialisation des deux stages (main + game)
-        if(!mainStageInitialized)
-            initializeMainStage(stage);
-        if(!gameStageInitialized)
-            initializeGameStage();
-
-        //Lancement mainStage
-        if(gameStage.isShowing())
-            gameStage.hide();
-        mainStage.show();
-    }
-
-    public static void launchGameStage(){
-        mainStage.hide();
+        gameStage.setOnCloseRequest(event -> mainStage.show());
         gameStage.show();
+        gameController.setMainController(this);
     }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public void setSousMenuController(SousMenuController sousMenuController) {
+        sousMenuController.setMainController(this);
+        this.sousMenuController = sousMenuController;
+    }
+
 }

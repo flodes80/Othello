@@ -1,5 +1,7 @@
 package gui.controllers;
 
+import gamestuff.Game;
+import gamestuff.Player;
 import gamestuff.ai.Difficulty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,13 +12,15 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SousMenuController implements Initializable {
+public class SousMenuController implements Initializable{
 
     @FXML
     private AnchorPane  anchorPaneJvsIA, anchorPaneJvsJ;
@@ -28,6 +32,8 @@ public class SousMenuController implements Initializable {
     private Slider sliderIA;
     @FXML
     private Text labelDifficulty;
+
+    private MainController mainController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,24 +64,32 @@ public class SousMenuController implements Initializable {
         if ((textFieldJ1.getText().equals("") || textFieldJ2.getText().equals(""))) {
             System.out.println("vide");
         } else {
-            MainController.launchGameStage();
+            mainController.launchGame(new Game(new Player(textFieldJ1.getText(), false, Color.WHITE),
+                    new Player(textFieldJ2.getText(), false, Color.BLACK)));
         }
     }
 
     @FXML
     private void handleButtonValidateJvsIAAction(ActionEvent event) throws IOException {
-        MainController.launchGameStage();
+        mainController.launchGame(new Game(new Player(textFieldJ1.getText(), false, Color.WHITE),
+                new Player("Ordinateur", true, Color.BLACK)));
     }
 
     private void backToMainMenu(AnchorPane p_anchorPane) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/interfaces/Menu.fxml"));
         Pane registerPane = fxmlLoader.load();
+        MenuPrincipalController menuPrincipalController = fxmlLoader.getController();
+        menuPrincipalController.setMainController(mainController);
         try {
             p_anchorPane.getChildren().clear();
             p_anchorPane.getChildren().add(registerPane);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
     }
 
 }

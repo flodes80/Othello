@@ -35,9 +35,14 @@ public class GameController implements Initializable {
     Label labelJoueur1;
 
     @FXML
+    Label labelJoueur2;
+
+    @FXML
     GridPane gridPaneGame;
 
    private Image black, white, empty;
+
+    private MainController mainController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -54,7 +59,6 @@ public class GameController implements Initializable {
         gridPaneGame.add(new ImageView(black), 3, 4);
         gridPaneGame.add(new ImageView(black), 4, 3);
         gridPaneGame.add(new ImageView(white), 4, 4);
-
     }
 
     @FXML
@@ -85,5 +89,9 @@ public class GameController implements Initializable {
         }
     }
 
-
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+        labelJoueur1.setText(mainController.getGame().getPlayer1().getName());
+        labelJoueur2.setText(mainController.getGame().getPlayer2().getName());
+    }
 }
