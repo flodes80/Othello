@@ -71,7 +71,7 @@ public class SousMenuController implements Initializable{
 
     @FXML
     private void handleButtonValidateJvsIAAction(ActionEvent event) throws IOException {
-        mainController.launchGame(new Game(new Player(textFieldJ1.getText(), false, Color.WHITE),
+        mainController.launchGame(new Game(new Player(textFieldJ1.getText(), false, Color.WHITE),   //maincontroller = null
                 new Player("Ordinateur", true, Color.BLACK)));
     }
 

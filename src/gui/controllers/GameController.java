@@ -40,7 +40,7 @@ public class GameController implements Initializable {
     @FXML
     GridPane gridPaneGame;
 
-   private Image black, white, empty;
+    private Image black, white, empty;
 
     private MainController mainController;
 
