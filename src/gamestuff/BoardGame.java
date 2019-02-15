@@ -56,4 +56,26 @@ public class BoardGame {
         gameController.getGridPaneGame().add(new ImageView(white), 4, 4);
         gameController.getRectangleJoueur1().setVisible(true);
     }
+
+    public int calculPiecePlayer1(){
+        int score = 0;
+        for(int i = 0; i < board.length; i++){
+            for(int j = 0; j < board[i].length; j++){
+                if (board[i][j] == 0)
+                    score++;
+            }
+        }
+        return score;
+    }
+
+    public int calculPiecePlayer2(){
+        int score = 0;
+        for(int i = 0; i < board.length; i++){
+            for(int j = 0; j < board[i].length; j++){
+                if (board[i][j] == 1)
+                    score++;
+            }
+        }
+        return score;
+    }
 }

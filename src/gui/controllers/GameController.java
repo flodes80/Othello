@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -43,6 +44,9 @@ public class GameController implements Initializable {
 
     @FXML
     Rectangle rectangleJoueur1, rectangleJoueur2;
+
+    @FXML
+    Label labelScoreJ1, labelScoreJ2;
 
     private MainController mainController;
 
@@ -92,5 +96,13 @@ public class GameController implements Initializable {
 
     public Rectangle getRectangleJoueur2() {
         return rectangleJoueur2;
+    }
+
+    public Label getLabelScoreJ1() {
+        return labelScoreJ1;
+    }
+
+    public Label getLabelScoreJ2() {
+        return labelScoreJ2;
     }
 }

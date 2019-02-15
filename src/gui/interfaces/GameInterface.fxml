@@ -13,7 +13,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="748.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.GameController">
    <children>
@@ -25,16 +24,6 @@
             <Rectangle2D />
          </viewport>
       </ImageView>
-      <Text fx:id="labelScoreJ1" fill="WHITE" layoutX="51.0" layoutY="706.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" textAlignment="CENTER" wrappingWidth="47.09962737560272">
-         <font>
-            <Font size="40.0" />
-         </font>
-      </Text>
-      <Text fx:id="labelScoreJ2" fill="WHITE" layoutX="993.0" layoutY="705.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" textAlignment="CENTER" wrappingWidth="47.09962737560272">
-         <font>
-            <Font size="40.0" />
-         </font>
-      </Text>
       <Rectangle fx:id="rectangleJoueur1" arcHeight="5.0" arcWidth="5.0" fill="#ff000074" height="64.0" layoutX="52.0" layoutY="59.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="411.0" />
       <GridPane fx:id="gridPaneGame" gridLinesVisible="false" layoutX="358.0" layoutY="153.0" onMouseClicked="#clickGrid" prefHeight="563.0" prefWidth="563.0">
         <columnConstraints>
@@ -149,5 +138,15 @@
         </menus>
       </MenuBar>
       <Rectangle fx:id="rectangleJoueur2" arcHeight="5.0" arcWidth="5.0" fill="#ff000074" height="64.0" layoutX="820.0" layoutY="59.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="411.0" />
+      <Label fx:id="labelScoreJ2" layoutX="1007.0" layoutY="636.0" text="2" textFill="#127117">
+         <font>
+            <Font name="Bodoni MT" size="74.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelScoreJ1" layoutX="52.0" layoutY="636.0" text="2" textFill="#127117">
+         <font>
+            <Font name="Bodoni MT" size="74.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

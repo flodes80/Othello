@@ -36,9 +36,10 @@ public class Game {
             placed = boardGame.add((byte) 0, colonne, ligne);
         else
             placed = boardGame.add((byte) 1, colonne, ligne);
-
         if(placed)  // Si le pion a été placé
             switchCurrentPlayer();
+        gameController.getLabelScoreJ1().setText(String.valueOf(boardGame.calculPiecePlayer1()));
+        gameController.getLabelScoreJ2().setText(String.valueOf(boardGame.calculPiecePlayer2()));
     }
 
     private void switchCurrentPlayer(){
