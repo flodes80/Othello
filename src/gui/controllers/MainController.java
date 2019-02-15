@@ -63,6 +63,7 @@ public class MainController{
         gameStage.setOnCloseRequest(event -> mainStage.show());
         gameStage.show();
         gameController.setMainController(this);
+        game.setGameController(gameController);
     }
 
     public Game getGame() {

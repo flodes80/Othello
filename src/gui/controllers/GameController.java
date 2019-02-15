@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -40,25 +41,13 @@ public class GameController implements Initializable {
     @FXML
     GridPane gridPaneGame;
 
-    private Image black, white, empty;
+    @FXML
+    Rectangle rectangleJoueur1, rectangleJoueur2;
 
     private MainController mainController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        black = new Image("img/blackDisk.png");
-        white = new Image("img/whiteDisk.png");
-        empty = new Image("img/emptyDisk.png");
-        for (int i = 0; i < 8; i++){
-            for (int j = 0; j < 8; j++){
-
-                gridPaneGame.add(new ImageView(empty), i, j);
-            }
-        }
-        gridPaneGame.add(new ImageView(white), 3, 3);
-        gridPaneGame.add(new ImageView(black), 3, 4);
-        gridPaneGame.add(new ImageView(black), 4, 3);
-        gridPaneGame.add(new ImageView(white), 4, 4);
     }
 
     @FXML
@@ -66,10 +55,8 @@ public class GameController implements Initializable {
         Node source = (Node)event.getTarget() ;
         Integer colIndex = GridPane.getColumnIndex(source);
         Integer rowIndex = GridPane.getRowIndex(source);
-        System.out.printf("Mouse clicked cell [%d, %d]%n", colIndex, rowIndex);
-
-        gridPaneGame.add(new ImageView(white), colIndex, rowIndex);
-
+        if(colIndex != null && rowIndex != null)
+            mainController.getGame().play(colIndex, rowIndex);
     }
 
 
@@ -93,5 +80,17 @@ public class GameController implements Initializable {
         this.mainController = mainController;
         labelJoueur1.setText(mainController.getGame().getPlayer1().getName());
         labelJoueur2.setText(mainController.getGame().getPlayer2().getName());
+    }
+
+    public GridPane getGridPaneGame() {
+        return gridPaneGame;
+    }
+
+    public Rectangle getRectangleJoueur1() {
+        return rectangleJoueur1;
+    }
+
+    public Rectangle getRectangleJoueur2() {
+        return rectangleJoueur2;
     }
 }
