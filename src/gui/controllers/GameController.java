@@ -1,35 +1,24 @@
 package gui.controllers;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
-
-import static javafx.scene.control.ContentDisplay.CENTER;
 
 public class GameController implements Initializable {
 
@@ -48,10 +37,20 @@ public class GameController implements Initializable {
     @FXML
     Label labelScoreJ1, labelScoreJ2;
 
+    private Image white, black, hint;
+
     private MainController mainController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        white = new Image("img/whiteDisk.png");
+        black = new Image("img/blackDisk.png");
+        hint = new Image("img/hintDisk.png");
+        gridPaneGame.add(new ImageView(white), 3, 3);
+        gridPaneGame.add(new ImageView(black), 4, 3);
+        gridPaneGame.add(new ImageView(black), 3, 4);
+        gridPaneGame.add(new ImageView(white), 4, 4);
+        rectangleJoueur1.setVisible(true);
     }
 
     @FXML
@@ -84,6 +83,47 @@ public class GameController implements Initializable {
         this.mainController = mainController;
         labelJoueur1.setText(mainController.getGame().getPlayer1().getName());
         labelJoueur2.setText(mainController.getGame().getPlayer2().getName());
+    }
+
+    public void showAvailablesMoves(byte[][] availablesMoves, byte valuePlayer) {
+        removeOldHint();
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                if (availablesMoves[i][j] == (byte) 1) {
+                    if (valuePlayer == 0) {
+                        replaceNodeGridPane(i, j, new ImageView(hint));
+                    } else {
+                        replaceNodeGridPane(i, j, new ImageView(hint));
+                    }
+                }
+            }
+        }
+    }
+
+    private void removeOldHint() {
+        Iterator<Node> iter = gridPaneGame.getChildren().iterator();
+        while (iter.hasNext()) {
+            Node node = iter.next();
+            if (node instanceof ImageView) {
+                ImageView image = (ImageView) node;
+                if (image.getImage().equals(hint)) {
+                    iter.remove();
+                }
+            }
+        }
+    }
+
+    public void replaceNodeGridPane(int column, int row, Node newNode) {
+        // On supprimme d'abord ce qu'il y avait avant à cet emplacement
+        ObservableList<Node> childrens = gridPaneGame.getChildren();
+        for (Node node : childrens) {
+            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
+                gridPaneGame.getChildren().remove(node);
+                break;
+            }
+        }
+        // Puis on ajoute
+        gridPaneGame.add(newNode, column, row);
     }
 
     public GridPane getGridPaneGame() {
