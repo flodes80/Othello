@@ -10,7 +10,6 @@ public class BoardGame {
 
     //Colonne / Ligne
     private byte[][] board;
-
     private GameController gameController;
     private Image black, white;
 
@@ -36,11 +35,12 @@ public class BoardGame {
      */
     public boolean add(byte value, int colonne, int ligne){
         if(isEmpty(board[colonne][ligne])){
-            board[colonne][ligne] = value;
             if (value == 0 && isAnAvailableMove(value, colonne, ligne)) {
+                board[colonne][ligne] = value;
                 gameController.replaceNodeGridPane(colonne, ligne, new ImageView(white));
                 return true;
             } else if (value == 1 && isAnAvailableMove(value, colonne, ligne)) {
+                board[colonne][ligne] = value;
                 gameController.replaceNodeGridPane(colonne, ligne, new ImageView(black));
                 return true;
             }
@@ -52,13 +52,13 @@ public class BoardGame {
      * Check si la position choisie est une position "légale"
      *
      * @param value Valeur du pion joué
-     * @param col   Colonne jouée
+     * @param colonne Colonne jouée
      * @param ligne Ligne jouée
      * @return
      */
-    private boolean isAnAvailableMove(byte value, int col, int ligne) {
+    private boolean isAnAvailableMove(byte value, int colonne, int ligne) {
         byte[][] availableMoves = getAvailablesMoves(value);
-        return availableMoves[col][ligne] == 1;
+        return availableMoves[colonne][ligne] == 1;
     }
 
     /**
@@ -83,6 +83,8 @@ public class BoardGame {
                         while (col <= 7 && row <= 7 && col >= 0 && row >= 0 && currentValue != -1) {
                             col += direction.getColstep();
                             row += direction.getRowstep();
+                            if (col > 7 || row > 7 || col < 0 || row < 0)
+                                break;
                             previousValue = currentValue;
                             currentValue = board[col][row];
                             if (currentValue == value)
@@ -101,7 +103,7 @@ public class BoardGame {
      * La valeur de la case est-elle vide ?
      *
      * @param value
-     * @return
+     * @return true si vide
      */
     private boolean isEmpty(byte value){
         return value == -1;

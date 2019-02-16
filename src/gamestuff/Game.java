@@ -36,6 +36,13 @@ public class Game {
         gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
     }
 
+
+    /**
+     * Jouer un pion
+     *
+     * @param colonne colonne jouée
+     * @param ligne   ligne jouée
+     */
     public void play(int colonne, int ligne){
         boolean placed;
         if(currentPlayer.getColor() == Color.WHITE)
