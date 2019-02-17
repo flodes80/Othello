@@ -87,8 +87,8 @@ public class GameController implements Initializable {
 
     public void showAvailablesMoves(byte[][] availablesMoves, byte valuePlayer) {
         removeOldHint();
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 7; j++) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
                 if (availablesMoves[i][j] == (byte) 1) {
                     if (valuePlayer == 0) {
                         replaceNodeGridPane(i, j, new ImageView(hint));

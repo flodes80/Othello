@@ -2,8 +2,9 @@ package gamestuff;
 
 public enum Direction {
 
+    // COLONNE / LIGNE
     /* ↑ */ NORTH(0, -1),
-    /* ↓ */ SOUTH(1, 1),
+    /* ↓ */ SOUTH(0, 1),
     /* ← */ WEST(-1, 0),
     /* → */ EAST(1, 0),
     /* ↖ */ NORTHWEST(-1, -1),
@@ -13,7 +14,7 @@ public enum Direction {
     private int rowstep;
     private int colstep;
 
-    Direction(int rowstep, int colstep) {
+    Direction(int colstep, int rowstep) {
         this.rowstep = rowstep;
         this.colstep = colstep;
     }
