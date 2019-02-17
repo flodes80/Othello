@@ -23,10 +23,10 @@ import java.util.ResourceBundle;
 public class GameController implements Initializable {
 
     @FXML
-    Label labelJoueur1;
+    Label labelJoueur1, labelJoueur2, labelWinnerName;
 
     @FXML
-    Label labelJoueur2;
+    ImageView imageGameOver;
 
     @FXML
     GridPane gridPaneGame;
@@ -86,18 +86,24 @@ public class GameController implements Initializable {
     }
 
     public void showAvailablesMoves(byte[][] availablesMoves, byte valuePlayer) {
+        boolean gameOver = true;
         removeOldHint();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (availablesMoves[i][j] == (byte) 1) {
                     if (valuePlayer == 0) {
                         replaceNodeGridPane(i, j, new ImageView(hint));
+                        gameOver = false;
                     } else {
                         replaceNodeGridPane(i, j, new ImageView(hint));
+                        gameOver = false;
                     }
                 }
             }
         }
+
+        if (gameOver)
+            mainController.getGame().gameOver();
     }
 
     private void removeOldHint() {
@@ -126,6 +132,9 @@ public class GameController implements Initializable {
         gridPaneGame.add(newNode, column, row);
     }
 
+
+
+
     public GridPane getGridPaneGame() {
         return gridPaneGame;
     }
@@ -144,5 +153,13 @@ public class GameController implements Initializable {
 
     public Label getLabelScoreJ2() {
         return labelScoreJ2;
+    }
+
+    public Label getLabelWinnerName() {
+        return labelWinnerName;
+    }
+
+    public ImageView getImageGameOver() {
+        return imageGameOver;
     }
 }

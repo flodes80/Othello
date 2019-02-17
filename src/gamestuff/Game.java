@@ -1,6 +1,7 @@
 package gamestuff;
 
 import gui.controllers.GameController;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -64,6 +65,37 @@ public class Game {
         }
 
     }
+
+    public void gameOver(){
+        System.out.println("game over");
+        // Requête d'affichage des scores
+        gameController.getLabelScoreJ1().setText(String.valueOf(boardGame.calculPiecePlayer1()));
+        gameController.getLabelScoreJ2().setText(String.valueOf(boardGame.calculPiecePlayer2()));
+
+        int emptyCase = boardGame.calculEmptyCase();
+        String resultat = "";
+
+        // Determine le gagnant
+        if (boardGame.calculPiecePlayer1() > boardGame.calculPiecePlayer2()) {
+            player1.setScore(player1.getScore() + emptyCase);
+            gameController.getLabelScoreJ1().setText(String.valueOf(boardGame.calculPiecePlayer1() + emptyCase));
+            resultat = player1.getName();
+        }
+        else if (boardGame.calculPiecePlayer1() < boardGame.calculPiecePlayer2()){
+            player2.setScore(player2.getScore() + emptyCase);
+            gameController.getLabelScoreJ2().setText(String.valueOf(boardGame.calculPiecePlayer2() + emptyCase));
+            resultat = player2.getName();
+        }
+        else
+            resultat = "Egalité";
+
+        //Affiche le gagnant
+        gameController.getImageGameOver().setVisible(true);
+        gameController.getLabelWinnerName().setText(resultat);
+        gameController.getLabelWinnerName().setVisible(true);
+        gameController.getLabelWinnerName().setAlignment(Pos.CENTER);
+    }
+
 
     private void switchCurrentPlayer(){
         if(currentPlayer == player1) {

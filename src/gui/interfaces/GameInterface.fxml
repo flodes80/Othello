@@ -25,6 +25,7 @@
          </viewport>
       </ImageView>
       <Rectangle fx:id="rectangleJoueur1" arcHeight="5.0" arcWidth="5.0" fill="#ff000074" height="64.0" layoutX="52.0" layoutY="59.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="411.0" />
+      <Rectangle fx:id="rectangleJoueur2" arcHeight="5.0" arcWidth="5.0" fill="#ff000074" height="64.0" layoutX="820.0" layoutY="59.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="411.0" />
       <GridPane fx:id="gridPaneGame" gridLinesVisible="false" layoutX="358.0" layoutY="153.0" onMouseClicked="#clickGrid" prefHeight="563.0" prefWidth="563.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="72.66665649414062" minWidth="10.0" prefWidth="71.900" />
@@ -113,12 +114,12 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="7" GridPane.rowIndex="7" />
          </children>
       </GridPane>
-       <Label fx:id="labelJoueur1" layoutX="75.0" layoutY="65.0" text="Joueur 1" textFill="#ba8968">
+       <Label fx:id="labelJoueur1" layoutX="75.0" layoutY="65.0" text="Joueur 1" textFill="WHITE">
            <font>
                <Font name="Bell MT" size="44.0" />
            </font>
        </Label>
-       <Label fx:id="labelJoueur2" layoutX="843.0" layoutY="65.0" prefHeight="47.0" prefWidth="374.0" text="Joueur 2" textFill="#ba8968">
+       <Label fx:id="labelJoueur2" layoutX="843.0" layoutY="65.0" prefHeight="47.0" prefWidth="374.0" text="Joueur 2" textFill="WHITE">
            <font>
                <Font name="Bell MT" size="44.0" />
            </font>
@@ -137,7 +138,6 @@
           </Menu>
         </menus>
       </MenuBar>
-      <Rectangle fx:id="rectangleJoueur2" arcHeight="5.0" arcWidth="5.0" fill="#ff000074" height="64.0" layoutX="820.0" layoutY="59.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="411.0" />
       <Label fx:id="labelScoreJ2" layoutX="1007.0" layoutY="636.0" text="2" textFill="#127117">
          <font>
             <Font name="Bodoni MT" size="74.0" />
@@ -148,5 +148,14 @@
             <Font name="Bodoni MT" size="74.0" />
          </font>
       </Label>
+      <ImageView fx:id="imageGameOver" fitHeight="520.0" fitWidth="869.0" layoutX="207.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../../img/overlay.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="labelWinnerName" layoutX="358.0" layoutY="212.0" prefHeight="113.0" prefWidth="563.0" text="Winner" textAlignment="CENTER" visible="false">
+         <font>
+            <Font name="Bodoni MT" size="105.0" />
+         </font></Label>
    </children>
 </AnchorPane>
