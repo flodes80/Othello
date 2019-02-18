@@ -4,9 +4,7 @@ import gamestuff.Game;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -54,7 +52,7 @@ public class MainController{
         }
         gameController = fxmlLoader.getController();
         gameStage = new Stage();
-        Scene gameScene = new Scene(root);
+        Scene gameScene = new Scene(root, 1280, 748, true, SceneAntialiasing.BALANCED);
         gameStage.setScene(gameScene);
         gameStage.setTitle(title);
         gameStage.getIcons().add(new Image("img/icon.png"));

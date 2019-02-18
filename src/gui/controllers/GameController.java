@@ -1,20 +1,31 @@
 package gui.controllers;
 
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -38,29 +49,39 @@ public class GameController implements Initializable {
     @FXML
     Label labelScoreJ1, labelScoreJ2;
 
-    private Image white, black, hint;
+    @FXML
+    AnchorPane anchorPane;
+
+    private Image hint;
 
     private MainController mainController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        white = new Image("img/whiteDisk.png");
-        black = new Image("img/blackDisk.png");
         hint = new Image("img/hintDisk.png");
-        gridPaneGame.add(new ImageView(white), 3, 3);
-        gridPaneGame.add(new ImageView(black), 4, 3);
-        gridPaneGame.add(new ImageView(black), 3, 4);
-        gridPaneGame.add(new ImageView(white), 4, 4);
+
+        gridPaneGame.add(createDisk(false), 3, 3);
+        gridPaneGame.add(createDisk(true), 4, 3);
+        gridPaneGame.add(createDisk(true), 3, 4);
+        gridPaneGame.add(createDisk(false), 4, 4);
         rectangleJoueur1.setVisible(true);
     }
 
     @FXML
     private void clickGrid(MouseEvent event) {
-        Node source = (Node)event.getTarget() ;
-        Integer colIndex = GridPane.getColumnIndex(source);
-        Integer rowIndex = GridPane.getRowIndex(source);
-        if(colIndex != null && rowIndex != null)
-            mainController.getGame().play(colIndex, rowIndex);
+        double xSource = event.getSceneX();
+        double ySource = event.getSceneY();
+        for (Node children : gridPaneGame.getChildren()) {
+            if (children instanceof ImageView) {
+                Bounds bounds = children.localToScene(children.getBoundsInLocal());
+                if (bounds.contains(xSource, ySource)) {
+                    Integer colIndex = GridPane.getColumnIndex(children);
+                    Integer rowIndex = GridPane.getRowIndex(children);
+                    mainController.getGame().play(colIndex, rowIndex);
+                    break;
+                }
+            }
+        }
     }
 
 
@@ -78,6 +99,79 @@ public class GameController implements Initializable {
         } catch (IOException e) {
             System.out.println("erreur");
         }
+    }
+
+    public void addNewDisk(byte value, int colonne, int ligne) {
+        boolean blackSideUp = value != 0;
+        gridPaneGame.add(createDisk(blackSideUp), colonne, ligne);
+    }
+
+    private Group createDisk(boolean blackSideUp) {
+        Group group = new Group();
+
+        group.setRotationAxis(Rotate.Y_AXIS);
+
+
+        PhongMaterial blackMaterial = new PhongMaterial(Color.WHITE);
+        PhongMaterial whiteMaterial = new PhongMaterial(Color.WHITE);
+
+        Image imageWhite = new Image("img/whiteDisk.png");
+        Image imageBlack = new Image("img/blackDisk.png");
+
+        whiteMaterial.setDiffuseMap(imageWhite);
+        blackMaterial.setDiffuseMap(imageBlack);
+
+        Cylinder blackPart = new Cylinder();
+        blackPart.setRadius(31);
+        blackPart.setHeight(1.0f);
+        blackPart.setTranslateZ(-29.0f);
+        blackPart.setRotationAxis(Rotate.X_AXIS);
+        blackPart.setRotate(90.0f);
+        blackPart.setMaterial(blackMaterial);
+
+        Cylinder whitePart = new Cylinder();
+        whitePart.setRadius(31);
+        whitePart.setHeight(1.0f);
+        whitePart.setTranslateZ(-32.0f);
+        whitePart.setRotationAxis(Rotate.X_AXIS);
+        whitePart.setRotate(90.0f);
+        whitePart.setMaterial(whiteMaterial);
+
+        if (blackSideUp)
+            group.setRotate(180.0f);
+
+        group.getChildren().add(blackPart);
+        group.getChildren().add(whitePart);
+
+        return (group);
+    }
+
+    /**
+     * Retourner un pion
+     *
+     * @param value   nouvelle valeur du pion
+     * @param colonne colonne du pion
+     * @param ligne   ligne du pion
+     */
+    public void flipDisk(byte value, int colonne, int ligne) {
+        Group disk = getGroupFromGridPane(colonne, ligne);
+        boolean toBlack = value == 0;
+
+        // Effectuer la rotation du pion
+        RotateTransition rotation = new RotateTransition(Duration.millis(1000), disk);
+        rotation.setFromAngle(toBlack ? 180.0f : 0.0f);
+        rotation.setToAngle(toBlack ? 0.0f : 180.0f);
+
+        // Souleve le pion pour ne pas qu'il passe en dessous de la "map"
+        TranslateTransition translation = new TranslateTransition(Duration.millis(200), disk);
+
+        translation.setAutoReverse(true);
+        translation.setByZ(-70.0f);
+        translation.setCycleCount(2);
+        translation.setInterpolator(Interpolator.EASE_OUT);
+
+        rotation.play();
+        translation.play();
     }
 
     public void showWinFrame(String winner) {
@@ -124,7 +218,6 @@ public class GameController implements Initializable {
                 break;
             }
         }
-        // Puis on ajoute
         gridPaneGame.add(newNode, column, row);
     }
 
@@ -134,8 +227,13 @@ public class GameController implements Initializable {
         labelJoueur2.setText(mainController.getGame().getPlayer2().getName());
     }
 
-    public GridPane getGridPaneGame() {
-        return gridPaneGame;
+    private Group getGroupFromGridPane(int col, int ligne) {
+        for (Node node : gridPaneGame.getChildren()) {
+            if (node instanceof Group && GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == ligne) {
+                return (Group) node;
+            }
+        }
+        return null;
     }
 
     public Rectangle getRectangleJoueur1() {

@@ -1,8 +1,6 @@
 package gamestuff;
 
 import gui.controllers.GameController;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import java.util.Arrays;
 
@@ -11,7 +9,6 @@ public class BoardGame {
     //Colonne / Ligne
     private byte[][] board;
     private GameController gameController;
-    private Image black, white;
 
     public BoardGame(){
         this.board = new byte[8][8];
@@ -21,8 +18,6 @@ public class BoardGame {
         board[4][3] = 1;                  // Pions noirs = 1
         board[3][4] = 1;
         board[4][4] = 0;
-        black = new Image("img/blackDisk.png");
-        white = new Image("img/whiteDisk.png");
     }
 
     /**
@@ -34,18 +29,11 @@ public class BoardGame {
      * @return True si le pion a été posé
      */
     public boolean add(byte value, int colonne, int ligne){
-        if(isEmpty(board[colonne][ligne])){
-            if (value == 0 && isAnAvailableMove(value, colonne, ligne)) {
-                board[colonne][ligne] = value;
-                gameController.replaceNodeGridPane(colonne, ligne, new ImageView(white));
-                revertPions(value, colonne, ligne);
-                return true;
-            } else if (value == 1 && isAnAvailableMove(value, colonne, ligne)) {
-                board[colonne][ligne] = value;
-                gameController.replaceNodeGridPane(colonne, ligne, new ImageView(black));
-                revertPions(value, colonne, ligne);
-                return true;
-            }
+        if (isEmpty(board[colonne][ligne]) && isAnAvailableMove(value, colonne, ligne)) {
+            board[colonne][ligne] = value;
+            gameController.addNewDisk(value, colonne, ligne);
+            revertPions(value, colonne, ligne);
+            return true;
         }
         return false;
     }
@@ -56,10 +44,7 @@ public class BoardGame {
             for (int j = 0; j < pionsToRevert.length; j++) {
                 if (pionsToRevert[i][j] == 1) {
                     board[i][j] = value;
-                    if (value == 0)
-                        gameController.replaceNodeGridPane(i, j, new ImageView(white));
-                    else
-                        gameController.replaceNodeGridPane(i, j, new ImageView(black));
+                    gameController.flipDisk(value, i, j);
                 }
             }
         }
@@ -94,7 +79,6 @@ public class BoardGame {
                 if (flag1 && currentValue == value)
                     flag2 = true;
             } while (col <= board.length && row <= board.length && col >= 0 && row >= 0 && !flag2);
-
             if (flag1 && flag2) {
                 do {
                     col -= direction.getColstep();
@@ -102,6 +86,7 @@ public class BoardGame {
                     pionsToRevert[col][row] = 1;
                     currentValue = board[col][row];
                 } while (currentValue != value);
+                pionsToRevert[col][row] = 0;
             }
         }
         return pionsToRevert;
@@ -186,14 +171,10 @@ public class BoardGame {
             for (int j = 0; j < board.length; j++) {
                 if (isEmpty(board[i][j])) {
                     board[i][j] = value;
-                    gameController.replaceNodeGridPane(i, j, getImageView(value));
+                    gameController.addNewDisk(value, i, j);
                 }
             }
         }
-    }
-
-    private ImageView getImageView(byte value) {
-        return value == 0 ? new ImageView(white) : new ImageView(black);
     }
 
     /**
