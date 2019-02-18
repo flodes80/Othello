@@ -157,6 +157,17 @@ public class BoardGame {
         return moves;
     }
 
+    public int getAvailablesMovesAmount(byte value) {
+        int moves = 0;
+        byte[][] availablesMoves = getAvailablesMoves(value);
+        for (int i = 0; i < availablesMoves.length; i++) {
+            for (int j = 0; j < availablesMoves.length; j++)
+                if (availablesMoves[i][j] == 1)
+                    moves++;
+        }
+        return moves;
+    }
+
     /**
      * La valeur de la case est-elle vide ?
      *

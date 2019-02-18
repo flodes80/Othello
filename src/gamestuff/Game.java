@@ -105,14 +105,16 @@ public class Game {
 
     }
 
-
+    /**
+     * Procédure de changement de joueur
+     */
     private void switchCurrentPlayer() {
-        //TODO Ne pas changer de joueurs lorsque aucun mouvements disponible.
-        if(currentPlayer == player1) {
+        // Si le joueur actuel est le joueur 1 et que le joueur 2 peut jouer (mouvements possibles > 0)
+        if (currentPlayer == player1 && boardGame.getAvailablesMovesAmount(getPlayerValue(player2)) > 0) {
             currentPlayer = player2;
             gameController.getRectangleJoueur1().setVisible(false);
             gameController.getRectangleJoueur2().setVisible(true);
-        } else {
+        } else if (currentPlayer == player2 && boardGame.getAvailablesMovesAmount(getPlayerValue(player1)) != 0) {
             currentPlayer = player1;
             gameController.getRectangleJoueur1().setVisible(true);
             gameController.getRectangleJoueur2().setVisible(false);
