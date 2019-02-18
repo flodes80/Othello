@@ -201,7 +201,7 @@ public class BoardGame {
         int emptyCase = 0;
         for(int i = 0; i < board.length; i++){
             for(int j = 0; j < board[i].length; j++){
-                if (board[i][j] == -1)
+                if (isEmpty(board[i][j]))
                     emptyCase++;
             }
         }

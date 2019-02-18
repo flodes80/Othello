@@ -1,9 +1,6 @@
 package gamestuff;
 
 import gui.controllers.GameController;
-import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class Game {
@@ -12,15 +9,12 @@ public class Game {
     private Player currentPlayer;
     private BoardGame boardGame;
     private GameController gameController;
-    private ImageView black, white;
 
     public Game(Player player1, Player player2){
         this.player1 = player1;
         this.player2 = player2;
         boardGame = new BoardGame();
         currentPlayer = player1;
-        black = new ImageView(new Image("img/blackDisk.png"));
-        white = new ImageView(new Image("img/whiteDisk.png"));
     }
 
     public Player getPlayer1() {
@@ -45,7 +39,10 @@ public class Game {
      * @param ligne   ligne jouée
      */
     public void play(int colonne, int ligne){
+        // Booléen permettant de savoir si le pion à été placé ou non
         boolean placed;
+
+        // Détection du joueur qui joue en fonction de sa couleur
         if(currentPlayer.getColor() == Color.WHITE)
             placed = boardGame.add((byte) 0, colonne, ligne);
         else
@@ -53,57 +50,69 @@ public class Game {
 
         // Si le pion a été placé
         if (placed) {
+            // Mise à jour des scores des joueurs
+            player1.setScore(boardGame.calculPiecePlayer1());
+            player2.setScore(boardGame.calculPiecePlayer2());
+
             // Requête d'affichage des scores
-            gameController.getLabelScoreJ1().setText(String.valueOf(boardGame.calculPiecePlayer1()));
-            gameController.getLabelScoreJ2().setText(String.valueOf(boardGame.calculPiecePlayer2()));
+            gameController.getLabelScoreJ1().setText(String.valueOf(player1.getScore()));
+            gameController.getLabelScoreJ2().setText(String.valueOf(player2.getScore()));
 
-            // Changement de joueur
-            switchCurrentPlayer();
+            // La partie est-elle finie ?
+            if (isGameOver()) {
+                gameOver();
+            }
 
-            // Requête d'affichage des mouvements disponibles
-            gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
+            // Sinon on continue le déroulement normal
+            else {
+                // Changement de joueur
+                switchCurrentPlayer();
+
+                // Requête d'affichage des mouvements disponibles
+                gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
+            }
+
         }
 
     }
 
-    public void gameOver(){
-        System.out.println("game over");
-        // Requête d'affichage des scores
-        gameController.getLabelScoreJ1().setText(String.valueOf(boardGame.calculPiecePlayer1()));
-        gameController.getLabelScoreJ2().setText(String.valueOf(boardGame.calculPiecePlayer2()));
+    /**
+     * Détection de fin de partie si il ne reste plus de cases vides
+     *
+     * @return
+     */
+    public boolean isGameOver() {
+        return boardGame.calculEmptyCase() == 0;
+    }
 
-        int emptyCase = boardGame.calculEmptyCase();
-        String resultat = "";
+    /**
+     * Procédure de fin de partie
+     */
+    private void gameOver() {
+        String winner = "";
 
         // Determine le gagnant
         if (boardGame.calculPiecePlayer1() > boardGame.calculPiecePlayer2()) {
-            player1.setScore(player1.getScore() + emptyCase);
-            gameController.getLabelScoreJ1().setText(String.valueOf(boardGame.calculPiecePlayer1() + emptyCase));
-            resultat = player1.getName();
+            winner = player1.getName();
         }
-        else if (boardGame.calculPiecePlayer1() < boardGame.calculPiecePlayer2()){
-            player2.setScore(player2.getScore() + emptyCase);
-            gameController.getLabelScoreJ2().setText(String.valueOf(boardGame.calculPiecePlayer2() + emptyCase));
-            resultat = player2.getName();
-        }
-        else
-            resultat = "Egalité";
+        else if (boardGame.calculPiecePlayer1() < boardGame.calculPiecePlayer2()) {
+            winner = player2.getName();
+        } else
+            winner = "Egalité";
 
-        //Affiche le gagnant
-        gameController.getImageGameOver().setVisible(true);
-        gameController.getLabelWinnerName().setText(resultat);
-        gameController.getLabelWinnerName().setVisible(true);
-        gameController.getLabelWinnerName().setAlignment(Pos.CENTER);
+        // Requête d'affichage du vainqueur
+        gameController.showWinFrame(winner);
+
     }
 
 
-    private void switchCurrentPlayer(){
+    private void switchCurrentPlayer() {
+        //TODO Ne pas changer de joueurs lorsque aucun mouvements disponible.
         if(currentPlayer == player1) {
             currentPlayer = player2;
             gameController.getRectangleJoueur1().setVisible(false);
             gameController.getRectangleJoueur2().setVisible(true);
-        }
-        else {
+        } else {
             currentPlayer = player1;
             gameController.getRectangleJoueur1().setVisible(true);
             gameController.getRectangleJoueur2().setVisible(false);

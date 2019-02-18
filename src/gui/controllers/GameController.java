@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -79,31 +80,26 @@ public class GameController implements Initializable {
         }
     }
 
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-        labelJoueur1.setText(mainController.getGame().getPlayer1().getName());
-        labelJoueur2.setText(mainController.getGame().getPlayer2().getName());
+    public void showWinFrame(String winner) {
+        imageGameOver.setVisible(true);
+        labelWinnerName.setText(winner);
+        labelWinnerName.setVisible(true);
+        labelWinnerName.setAlignment(Pos.CENTER);
     }
 
     public void showAvailablesMoves(byte[][] availablesMoves, byte valuePlayer) {
-        boolean gameOver = true;
         removeOldHint();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (availablesMoves[i][j] == (byte) 1) {
                     if (valuePlayer == 0) {
                         replaceNodeGridPane(i, j, new ImageView(hint));
-                        gameOver = false;
                     } else {
                         replaceNodeGridPane(i, j, new ImageView(hint));
-                        gameOver = false;
                     }
                 }
             }
         }
-
-        if (gameOver)
-            mainController.getGame().gameOver();
     }
 
     private void removeOldHint() {
@@ -132,8 +128,11 @@ public class GameController implements Initializable {
         gridPaneGame.add(newNode, column, row);
     }
 
-
-
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+        labelJoueur1.setText(mainController.getGame().getPlayer1().getName());
+        labelJoueur2.setText(mainController.getGame().getPlayer2().getName());
+    }
 
     public GridPane getGridPaneGame() {
         return gridPaneGame;
