@@ -114,10 +114,12 @@ public class Game {
             currentPlayer = player2;
             gameController.getRectangleJoueur1().setVisible(false);
             gameController.getRectangleJoueur2().setVisible(true);
-        } else if (currentPlayer == player2 && boardGame.getAvailablesMovesAmount(getPlayerValue(player1)) != 0) {
+        } else if (currentPlayer == player2 && boardGame.getAvailablesMovesAmount(getPlayerValue(player1)) > 0) {
             currentPlayer = player1;
             gameController.getRectangleJoueur1().setVisible(true);
             gameController.getRectangleJoueur2().setVisible(false);
+        } else if (currentPlayer == player2 && boardGame.getAvailablesMovesAmount(getPlayerValue(player1)) > 0 && boardGame.getAvailablesMovesAmount(getPlayerValue(player2)) > 0) {
+            boardGame.fillEmptyCell(getPlayerValue(currentPlayer));
         }
     }
 

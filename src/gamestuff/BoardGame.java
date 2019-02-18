@@ -157,6 +157,12 @@ public class BoardGame {
         return moves;
     }
 
+    /**
+     * Obtenir le nombre de mouvements légaux disponibles
+     *
+     * @param value valeur jouée
+     * @return nombre de mouvements légaux disponibles
+     */
     public int getAvailablesMovesAmount(byte value) {
         int moves = 0;
         byte[][] availablesMoves = getAvailablesMoves(value);
@@ -166,6 +172,28 @@ public class BoardGame {
                     moves++;
         }
         return moves;
+    }
+
+
+    /**
+     * Remplir les cellules vides par une valeur
+     * (Utile lorsque aucun joueur ne peut jouer)
+     *
+     * @param value Valeur du pion à jouer
+     */
+    public void fillEmptyCell(byte value) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (isEmpty(board[i][j])) {
+                    board[i][j] = value;
+                    gameController.replaceNodeGridPane(i, j, getImageView(value));
+                }
+            }
+        }
+    }
+
+    private ImageView getImageView(byte value) {
+        return value == 0 ? new ImageView(white) : new ImageView(black);
     }
 
     /**
