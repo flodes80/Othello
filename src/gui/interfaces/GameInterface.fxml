@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity"
-            minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clickGrid" prefHeight="748.0" prefWidth="1280.0"
+            minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clickGrid" prefHeight="720.0" prefWidth="1280.0"
             xmlns="http://javafx.com/javafx/10.0.1" fx:controller="gui.controllers.GameController">
    <children>
         <ImageView fitHeight="720.0" fitWidth="1280.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
@@ -120,7 +120,7 @@
                <Font name="Bell MT" size="44.0" />
            </font>
        </Label>
-      <MenuBar layoutY="-1.0" prefHeight="28.0" prefWidth="1280.0">
+       <MenuBar fx:id="barMenu" layoutY="-1.0" prefHeight="28.0" prefWidth="1280.0" translateZ="-50.0">
         <menus>
           <Menu mnemonicParsing="false" text="Fichier">
             <items>
@@ -144,12 +144,14 @@
             <Font name="Bodoni MT" size="74.0" />
          </font>
       </Label>
-      <ImageView fx:id="imageGameOver" fitHeight="520.0" fitWidth="869.0" layoutX="207.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true" visible="false">
+       <ImageView fx:id="imageGameOver" fitHeight="520.0" fitWidth="869.0" layoutX="207.0" layoutY="114.0"
+                  pickOnBounds="true" preserveRatio="true" translateZ="-50.0" visible="false">
          <image>
             <Image url="@../../img/overlay.png" />
          </image>
       </ImageView>
-      <Label fx:id="labelWinnerName" layoutX="358.0" layoutY="212.0" prefHeight="113.0" prefWidth="563.0" text="Winner" textAlignment="CENTER" visible="false">
+       <Label fx:id="labelWinnerName" layoutX="358.0" layoutY="212.0" prefHeight="113.0" prefWidth="563.0" text="Winner"
+              textAlignment="CENTER" translateZ="-50.0" visible="false">
          <font>
             <Font name="Bodoni MT" size="105.0" />
          </font></Label>

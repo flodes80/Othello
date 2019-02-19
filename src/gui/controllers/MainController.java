@@ -31,10 +31,11 @@ public class MainController{
             e.printStackTrace();
         }
         splashScreenController = loader.getController();
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 1270, 710);
         mainStage.setScene(scene);
         mainStage.setTitle(title);
         mainStage.getIcons().add(new Image("img/icon.png"));
+        mainStage.setResizable(false);
         mainStage.show();
         menuPrincipalController = splashScreenController.getMenuPrincipalController();
         menuPrincipalController.setMainController(this);
@@ -52,7 +53,8 @@ public class MainController{
         }
         gameController = fxmlLoader.getController();
         gameStage = new Stage();
-        Scene gameScene = new Scene(root, 1280, 748, true, SceneAntialiasing.BALANCED);
+        gameStage.setResizable(false);
+        Scene gameScene = new Scene(root, 1270, 720, true, SceneAntialiasing.BALANCED);
         gameStage.setScene(gameScene);
         gameStage.setTitle(title);
         gameStage.getIcons().add(new Image("img/icon.png"));
