@@ -1,19 +1,29 @@
 package gamestuff;
 
+import gamestuff.ai.Ai;
 import javafx.scene.paint.Color;
 
 public class Player {
 
     private String name;
-    private boolean ai;
+    private Ai ai;
     private Color color;
     private int score;
     private int wins;
 
-    public Player(String name, boolean ai, Color color){
+    public Player(String name, Color color) {
         this.name = name;
-        this.ai = ai;
         this.color = color;
+    }
+
+    public byte[] getAiPlay(BoardGame boardGame) {
+        byte[] move = new byte[2];
+
+        return move;
+    }
+
+    public boolean isAi() {
+        return ai != null;
     }
 
     public String getName() {
@@ -24,8 +34,8 @@ public class Player {
         this.name = name;
     }
 
-    public boolean isAi() {
-        return ai;
+    public void setAi(Ai ai) {
+        this.ai = ai;
     }
 
 

@@ -25,6 +25,10 @@ public class Game {
         return player2;
     }
 
+    public BoardGame getBoardGame() {
+        return boardGame;
+    }
+
     public void setGameController(GameController gameController){
         this.gameController = gameController;
         boardGame.setGameController(gameController);

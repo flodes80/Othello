@@ -2,8 +2,8 @@ package gui.controllers;
 
 import gamestuff.Game;
 import gamestuff.Player;
+import gamestuff.ai.Ai;
 import gamestuff.ai.Difficulty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +15,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -50,29 +49,32 @@ public class SousMenuController implements Initializable{
     }
 
     @FXML
-    private void handleButtonBackArrow(ActionEvent event) throws IOException {
+    private void handleButtonBackArrow() throws IOException {
         backToMainMenu(anchorPaneJvsIA);
     }
 
     @FXML
-    private void handleButtonBackArrow2(ActionEvent event) throws IOException {
+    private void handleButtonBackArrow2() throws IOException {
         backToMainMenu(anchorPaneJvsJ);
     }
 
     @FXML
-    private void handleButtonValidateJvsJAction(ActionEvent event) throws IOException {
+    private void handleButtonValidateJvsJAction() {
         if ((textFieldJ1.getText().equals("") || textFieldJ2.getText().equals(""))) {
             System.out.println("vide");
         } else {
-            mainController.launchGame(new Game(new Player(textFieldJ1.getText(), false, Color.WHITE),
-                    new Player(textFieldJ2.getText(), false, Color.BLACK)));
+            mainController.launchGame(new Game(
+                    new Player(textFieldJ1.getText(), Color.WHITE),
+                    new Player(textFieldJ2.getText(), Color.BLACK)));
         }
     }
 
     @FXML
-    private void handleButtonValidateJvsIAAction(ActionEvent event) throws IOException {
-        mainController.launchGame(new Game(new Player(textFieldJ1.getText(), false, Color.WHITE),   //maincontroller = null
-                new Player("Ordinateur", true, Color.BLACK)));
+    private void handleButtonValidateJvsIAAction() {
+        mainController.launchGame(new Game(
+                new Player(textFieldJ1.getText(), Color.WHITE),
+                new Player("Ordinateur", Color.BLACK)));
+        mainController.getGame().getPlayer2().setAi(new Ai(mainController.getGame()));
     }
 
     private void backToMainMenu(AnchorPane p_anchorPane) throws IOException {
