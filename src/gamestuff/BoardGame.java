@@ -33,6 +33,7 @@ public class BoardGame {
             board[colonne][ligne] = value;
             gameController.addNewDisk(value, colonne, ligne);
             revertPions(value, colonne, ligne);
+            gameController.soundFlipDisk(); // Joue le son
             return true;
         }
         return false;

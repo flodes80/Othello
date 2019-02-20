@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
@@ -162,16 +163,7 @@ public class GameController implements Initializable {
         rotation.setFromAngle(toBlack ? 180.0f : 0.0f);
         rotation.setToAngle(toBlack ? 0.0f : 180.0f);
 
-        // Souleve le pion pour ne pas qu'il passe en dessous de la "map"
-        TranslateTransition translation = new TranslateTransition(Duration.millis(200), disk);
-
-        translation.setAutoReverse(true);
-        translation.setByZ(-70.0f);
-        translation.setCycleCount(2);
-        translation.setInterpolator(Interpolator.EASE_OUT);
-
         rotation.play();
-        translation.play();
     }
 
     public void showWinFrame(String winner) {
@@ -234,6 +226,12 @@ public class GameController implements Initializable {
             }
         }
         return null;
+    }
+    
+    public void soundFlipDisk(){
+
+        AudioClip sound = new AudioClip(this.getClass().getResource("/sound/piece_pose_flip.mp3").toExternalForm());
+        sound.play();
     }
 
     public Rectangle getRectangleJoueur1() {
