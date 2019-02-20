@@ -31,7 +31,8 @@ public class BoardGame {
     public boolean add(byte value, int colonne, int ligne){
         if (isEmpty(board[colonne][ligne]) && isAnAvailableMove(value, colonne, ligne)) {
             board[colonne][ligne] = value;
-            gameController.addNewDisk(value, colonne, ligne);
+            if (!isAiBoardGame())
+                gameController.addNewDisk(value, colonne, ligne);
             revertPions(value, colonne, ligne);
             return true;
         }
@@ -44,7 +45,8 @@ public class BoardGame {
             for (int j = 0; j < pionsToRevert.length; j++) {
                 if (pionsToRevert[i][j] == 1) {
                     board[i][j] = value;
-                    gameController.flipDisk(value, i, j);
+                    if (!isAiBoardGame())
+                        gameController.flipDisk(value, i, j);
                 }
             }
         }
@@ -185,6 +187,10 @@ public class BoardGame {
      */
     private boolean isEmpty(byte value){
         return value == -1;
+    }
+
+    private boolean isAiBoardGame() {
+        return gameController == null;
     }
 
     private byte getEnnemyValue(byte value) {
