@@ -54,7 +54,7 @@ public class MainController{
         gameController = fxmlLoader.getController();
         gameStage = new Stage();
         gameStage.setResizable(false);
-        Scene gameScene = new Scene(root, 1270, 720, true, SceneAntialiasing.BALANCED);
+        Scene gameScene = new Scene(root, 1270, 737, true, SceneAntialiasing.BALANCED);
         gameStage.setScene(gameScene);
         gameStage.setTitle(title);
         gameStage.getIcons().add(new Image("img/icon.png"));

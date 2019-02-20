@@ -1,5 +1,8 @@
 package gui.controllers;
 
+import gamestuff.Player;
+import gamestuff.ResourceManager;
+import gamestuff.SaveData;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
@@ -25,11 +28,14 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -85,22 +91,6 @@ public class GameController implements Initializable {
         }
     }
 
-
-    @FXML
-    private void clickRegles(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/gui/interfaces/Rules.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            Stage stage = new Stage();
-            stage.setTitle("Othello : Règles");
-            stage.getIcons().add(new Image("img/icon.png"));
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            System.out.println("erreur");
-        }
-    }
 
     public void addNewDisk(byte value, int colonne, int ligne) {
         boolean blackSideUp = value != 0;
@@ -201,6 +191,27 @@ public class GameController implements Initializable {
         }
     }
 
+    public void removeAll() {
+        Iterator<Node> iter = gridPaneGame.getChildren().iterator();
+        while (iter.hasNext()) {
+            Node node = iter.next();
+            if (node instanceof Group) {
+                iter.remove();
+            }
+        }
+    }
+
+    public void placeDisksAccordingToBoard(byte[][] board) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j] != -1) {
+                    byte value = board[i][j];
+                    addNewDisk(value, i, j);
+                }
+            }
+        }
+    }
+
     public void replaceNodeGridPane(int column, int row, Node newNode) {
         // On supprimme d'abord ce qu'il y avait avant à cet emplacement
         ObservableList<Node> childrens = gridPaneGame.getChildren();
@@ -227,12 +238,54 @@ public class GameController implements Initializable {
         }
         return null;
     }
-    
-    public void soundFlipDisk(){
 
+
+    @FXML
+    private void clickRegles(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/gui/interfaces/Rules.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setTitle("Othello : Règles");
+            stage.getIcons().add(new Image("img/icon.png"));
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            System.out.println("erreur");
+        }
+    }
+
+    // Sauvegarder une partie
+    @FXML
+    private void clickSave(ActionEvent event) {
+        String player1 = mainController.getGame().getPlayer1().getName();
+        String player2 = mainController.getGame().getPlayer2().getName();
+        String currentPlayer = mainController.getGame().getCurrentPlayer().getName();
+        byte[][] board = mainController.getGame().getBoardGame().getBoard();
+
+        SaveData data = new SaveData();
+        data.board = board;
+        data.currentPlayer = currentPlayer;
+        data.player1 = player1;
+        data.player2 = player2;
+
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(null);
+
+        try {
+            ResourceManager.save(data, file.toString());
+        } catch (Exception e) {
+            System.out.println("error :" + e.getMessage());
+        }
+    }
+
+
+    public void soundFlipDisk() {
         AudioClip sound = new AudioClip(this.getClass().getResource("/sound/piece_pose_flip.mp3").toExternalForm());
         sound.play();
     }
+
 
     public Rectangle getRectangleJoueur1() {
         return rectangleJoueur1;

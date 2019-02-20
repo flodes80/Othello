@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity"
-            minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clickGrid" prefHeight="720.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/10.0.1" fx:controller="gui.controllers.GameController">
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#clickGrid" prefHeight="747.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.GameController">
    <children>
         <ImageView fitHeight="720.0" fitWidth="1280.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
          <image>
@@ -21,8 +26,7 @@
       </ImageView>
       <Rectangle fx:id="rectangleJoueur1" arcHeight="5.0" arcWidth="5.0" fill="#ff000074" height="64.0" layoutX="52.0" layoutY="59.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="411.0" />
       <Rectangle fx:id="rectangleJoueur2" arcHeight="5.0" arcWidth="5.0" fill="#ff000074" height="64.0" layoutX="820.0" layoutY="59.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="411.0" />
-       <GridPane fx:id="gridPaneGame" gridLinesVisible="false" layoutX="358.0" layoutY="153.0" prefHeight="563.0"
-                 prefWidth="563.0">
+       <GridPane fx:id="gridPaneGame" gridLinesVisible="false" layoutX="358.0" layoutY="153.0" prefHeight="563.0" prefWidth="563.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="72.66665649414062" minWidth="10.0" prefWidth="71.900" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="82.799951171875" minWidth="10.0" prefWidth="71.2" />
@@ -60,7 +64,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="Fichier">
             <items>
-              <MenuItem mnemonicParsing="false" text="Enregistrer" />
+              <MenuItem mnemonicParsing="false" onAction="#clickSave" text="Enregistrer" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Aide">
@@ -80,14 +84,12 @@
             <Font name="Bodoni MT" size="74.0" />
          </font>
       </Label>
-       <ImageView fx:id="imageGameOver" fitHeight="520.0" fitWidth="869.0" layoutX="207.0" layoutY="114.0"
-                  pickOnBounds="true" preserveRatio="true" translateZ="-50.0" visible="false">
+       <ImageView fx:id="imageGameOver" fitHeight="520.0" fitWidth="869.0" layoutX="207.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true" translateZ="-50.0" visible="false">
          <image>
             <Image url="@../../img/overlay.png" />
          </image>
       </ImageView>
-       <Label fx:id="labelWinnerName" layoutX="358.0" layoutY="212.0" prefHeight="113.0" prefWidth="563.0" text="Winner"
-              textAlignment="CENTER" translateZ="-50.0" visible="false">
+       <Label fx:id="labelWinnerName" layoutX="358.0" layoutY="212.0" prefHeight="113.0" prefWidth="563.0" text="Winner" textAlignment="CENTER" translateZ="-50.0" visible="false">
          <font>
             <Font name="Bodoni MT" size="105.0" />
          </font></Label>

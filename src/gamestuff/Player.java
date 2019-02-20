@@ -2,7 +2,9 @@ package gamestuff;
 
 import javafx.scene.paint.Color;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player  {
 
     private String name;
     private boolean ai;

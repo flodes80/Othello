@@ -11,8 +11,11 @@ import java.io.File;
 public class Game {
 
     private Player player1, player2;
+
     private Player currentPlayer;
+
     private BoardGame boardGame;
+
     private GameController gameController;
 
     public Game(Player player1, Player player2){
@@ -20,6 +23,15 @@ public class Game {
         this.player2 = player2;
         boardGame = new BoardGame();
         currentPlayer = player1;
+    }
+
+    // Constructeur chargement de partie sauvegardé
+    public Game(Player player1, Player player2, byte[][] board, Player currentPlayer){
+        this.player1 = player1;
+        this.player2 = player2;
+        boardGame = new BoardGame();
+        boardGame.setBoard(board);
+        this.currentPlayer = currentPlayer;
     }
 
     public Player getPlayer1() {
@@ -132,5 +144,15 @@ public class Game {
         return player == player1 ? (byte) 0 : (byte) 1;
     }
 
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
 
+    public BoardGame getBoardGame() {
+        return boardGame;
+    }
+
+    public GameController getGameController() {
+        return gameController;
+    }
 }

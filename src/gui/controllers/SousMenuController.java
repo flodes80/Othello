@@ -7,7 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -32,6 +34,8 @@ public class SousMenuController implements Initializable{
     private Slider sliderIA;
     @FXML
     private Text labelDifficulty;
+    @FXML
+    private Label labelErrorMessage;
 
     private MainController mainController;
 
@@ -62,8 +66,21 @@ public class SousMenuController implements Initializable{
     @FXML
     private void handleButtonValidateJvsJAction(ActionEvent event) throws IOException {
         if ((textFieldJ1.getText().equals("") || textFieldJ2.getText().equals(""))) {
-            System.out.println("vide");
-        } else {
+            labelErrorMessage.setText("Veuillez remplir tous les champs");
+            labelErrorMessage.setAlignment(Pos.CENTER);
+            labelErrorMessage.setVisible(true);
+        }
+        else if (textFieldJ1.getText().equals(textFieldJ2.getText())){
+            labelErrorMessage.setText("Veuillez choisir des noms différents");
+            labelErrorMessage.setAlignment(Pos.CENTER);
+            labelErrorMessage.setVisible(true);
+        }
+        else if (textFieldJ1.getText().length() > 15 || textFieldJ2.getText().length() > 15){
+            labelErrorMessage.setText("Veuillez inscrire des noms de moins de 15 caractères");
+            labelErrorMessage.setAlignment(Pos.CENTER);
+            labelErrorMessage.setVisible(true);
+        }
+        else {
             mainController.launchGame(new Game(new Player(textFieldJ1.getText(), false, Color.WHITE),
                     new Player(textFieldJ2.getText(), false, Color.BLACK)));
         }

@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 public class BoardGame {
 
+
+
     //Colonne / Ligne
     private byte[][] board;
     private GameController gameController;
@@ -228,4 +230,14 @@ public class BoardGame {
         }
         return emptyCase;
     }
+
+
+    public byte[][] getBoard() {
+        return board;
+    }
+    public void setBoard(byte[][] board) {
+        this.board = board;
+    }
+
+
 }
