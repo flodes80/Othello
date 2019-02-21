@@ -2,74 +2,60 @@ package gamestuff.ai;
 
 import gamestuff.BoardGame;
 
+import java.util.ArrayList;
+
+/**
+ * Un noeud correspond à un état du jeu
+ */
 public class Node {
 
-    byte[][] enemyAvailablesMoves;
+    private byte[][] availablesMoves;
     private BoardGame boardGame;
-    private int col, row;
-    private byte value, enemyValue;
+    private int col;
+    private int row;
+    private byte valueToPlay, ennemyValue;
 
-    // Sert à connaitre le dernier enfant parcouru pour obtenir le noeud frère
-    private int lastColChildren, lastRowChildren;
-
-    public Node(byte value, int col, int row, BoardGame boardGame) {
-        this.value = value;
-        this.enemyValue = value == 0 ? (byte) 1 : (byte) 0;
+    /**
+     * Constructeur d'un noeud
+     *
+     * @param valueToPlay Valeur du pion à jouer
+     * @param col         Colonne du pion à jouer
+     * @param row         Ligne du pion à jouer
+     * @param boardGame   boardGame avant avoir joué le pion
+     */
+    public Node(byte valueToPlay, int col, int row, BoardGame boardGame) {
+        this.valueToPlay = valueToPlay;
+        this.ennemyValue = valueToPlay == 0 ? (byte) 1 : 0; // On set simplement le pion adverse en fonction du pion que l'on vient de jouer
         this.col = col;
         this.row = row;
+
+        // On récupère le BoardGame passé en paramètre
         this.boardGame = new BoardGame(boardGame.getBoard());
-        enemyAvailablesMoves = this.boardGame.getAvailablesMoves(enemyValue);
+
+        // Puis on l'update en ajoutant la valeur jouée afin de ne pas se retrouver avec le même tableau de jeu
+        // Ce qui n'aurait aucun sens dans le sens inverse
+        this.boardGame.add(valueToPlay, col, row);
+
+        // Puis on obtient les mouvements adverses disponibles après avoir joué notre coup
+        availablesMoves = this.boardGame.getAvailablesMoves(ennemyValue);
     }
 
     /**
-     * Obtenir le nombre de noeuds enfants
-     *
-     * @return le nombre d'enfants du noeud
+     * Permet d'obtenir les noeuds fils du noeud actuel.
+     * Pour se faire on va simplement parcourir les mouvements adverses possibles à partir de la situation actuelle
+     * @return Les noeuds fils du noeud actuel
      */
-    public int getChildrensNodesAmount() {
-        // Pour obtenir le nombre d'enfant d'un noeud il faut d'abord déterminer si ce dernier est un noeud max ou min
-        // Ensuite on retourne le nombre de mouvements adverses possibles pour ce noeud
-        // Il faut retourner le nombre de mouvements possibles adverses car on change à chaque tour de joueur, ça n'aurait pas de sens sinon
-        return boardGame.getAvailablesMovesAmount(enemyValue);
-    }
-
-    /**
-     * Obtenir le noeud "frère" du précédent noeud sélectionné via lastColChildren et lastRowChildren
-     *
-     * @return le noeud frère du précédent noeud
-     */
-    public Node getBrotherNode() {
-        for (int i = lastColChildren; i < enemyAvailablesMoves.length; i++) {
-            for (int j = lastRowChildren + 1; j < enemyAvailablesMoves.length; j++) {
-                if (enemyAvailablesMoves[i][j] == 1) {
-                    boardGame.add(enemyValue, i, j);
-                    lastColChildren = i;
-                    lastRowChildren = j;
-                    return new Node(enemyValue, i, j, boardGame);
+    public ArrayList<Node> getChildrensNodes() {
+        ArrayList<Node> childrens = new ArrayList();
+        for (int i = 0; i < availablesMoves.length; i++) {
+            for (int j = 0; j < availablesMoves.length; j++) {
+                // Si la case est égale à 1, c'est un coup possible donc on ajoute ce nouveau noeud à la liste
+                if (availablesMoves[i][j] == 1) {
+                    childrens.add(new Node(ennemyValue, i, j, boardGame));
                 }
             }
         }
-        return null;
-    }
-
-    /**
-     * Obtenir le premier noeud enfant du noeud actuel
-     * Pour cela on renvoie un noeud avec le premier emplacement adverse "jouable"
-     *
-     * @return le premier noeud enfant
-     */
-    public Node getFirstChildrenNode() {
-        for (int i = 0; i < enemyAvailablesMoves.length; i++) {
-            for (int j = 0; j < enemyAvailablesMoves.length; j++) {
-                if (enemyAvailablesMoves[i][j] == 1) {
-                    boardGame.add(enemyValue, i, j);
-                    lastColChildren = i;
-                    lastRowChildren = j;
-                    return new Node(enemyValue, i, j, boardGame);
-                }
-            }
-        }
-        return null;
+        return childrens;
     }
 
     /**
@@ -82,7 +68,7 @@ public class Node {
     }
 
     /**
-     * Retourne l'évaluation de lui même
+     * Retourne l'évaluation du noeud lui même, donc de la situation du plateau actuelle
      *
      * @return La différence de ses propres pions et de celle de l'adversaire
      */
@@ -115,6 +101,13 @@ public class Node {
      * @return vrai si c'est un noeud max et faux si c'en est pas un
      */
     public boolean isMaxNode() {
-        return value == 1;
+        return valueToPlay == 1;
+    }
+
+    /**
+     * Sert au debug pour afficher un état du jeu
+     */
+    public void debug() {
+        boardGame.debug();
     }
 }

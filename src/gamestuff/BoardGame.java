@@ -4,27 +4,36 @@ import gui.controllers.GameController;
 
 import java.util.Arrays;
 
+/**
+ * La classe BoardGame représente le plateau de jeu.
+ * Une case est représenté par une coordonnée (Colonne / Ligne) et une valeur:
+ * -1 = Case vide
+ * 0 = Case Joueur1
+ * 1 = Case Joueur2
+ */
 public class BoardGame {
 
-    //Colonne / Ligne
     private byte[][] board;
     private GameController gameController;
 
     public BoardGame(){
         this.board = new byte[8][8];
         for(byte[] ligne : board)
-            Arrays.fill(ligne, (byte)-1); // Les cases vides sont égales à -1
-        board[3][3] = 0;                  // Pions blancs = 0
-        board[4][3] = 1;                  // Pions noirs = 1
+            Arrays.fill(ligne, (byte) -1);
+        board[3][3] = 0;
+        board[4][3] = 1;
         board[3][4] = 1;
         board[4][4] = 0;
     }
 
+    /**
+     * Ce constructeur est utilisé pour l'IA qui recopie le tableau qui lui est passé et ne pas interférer avec le véritable tableau de jeu
+     * @param board Tableau de jeu à copier
+     */
     public BoardGame(byte[][] board) {
         this.board = new byte[8][8];
-        for (int i = 0; i < board.length; i++) {
+        for (int i = 0; i < board.length; i++)
             this.board[i] = board[i].clone();
-        }
     }
 
     /**
@@ -46,8 +55,17 @@ public class BoardGame {
         return false;
     }
 
+    /**
+     * Fonction permettant de retourner les pions après avoir jouer un coup
+     * @param value Valeur jouée
+     * @param colonne Colonne jouéee
+     * @param ligne Ligne jouée
+     */
     private void revertPions(byte value, int colonne, int ligne) {
+        // On get les pions à retourner
         byte[][] pionsToRevert = getPionsToRevert(value, colonne, ligne);
+
+        // Puis on parcourt tous les pions à retourner 1 à 1
         for (int i = 0; i < pionsToRevert.length; i++) {
             for (int j = 0; j < pionsToRevert.length; j++) {
                 if (pionsToRevert[i][j] == 1) {
@@ -196,10 +214,22 @@ public class BoardGame {
         return value == -1;
     }
 
+
+    /**
+     * Ce check permet de ne pas se prendre un NullPointerException.
+     * En effet l'ia se créer un boardgame pour chaque noeud mais n'a donc pas besoin d'avoir un gameController car c'est un boardGame fictif
+     * qui sert uniquement à simuler des coups
+     * @return
+     */
     private boolean isAiBoardGame() {
         return gameController == null;
     }
 
+    /**
+     * Obtenir la valeur de jeu de l'adversaire à partir de sa propre valeur
+     * @param value Valeur jouée
+     * @return Valeur adverse
+     */
     private byte getEnnemyValue(byte value) {
         return value == 0 ? (byte) 1 : (byte) 0;
     }
@@ -208,6 +238,10 @@ public class BoardGame {
         this.gameController = gameController;
     }
 
+    /**
+     * Permet de calculer le nombre de pions sur le plateau du joueur 1
+     * @return Nombre de pions du joueur 1 sur le plateau
+     */
     public int calculPiecePlayer1(){
         int score = 0;
         for(int i = 0; i < board.length; i++){
@@ -219,6 +253,10 @@ public class BoardGame {
         return score;
     }
 
+    /**
+     * Permet de calculer le nombre de pions sur le plateau du joueur 2
+     * @return Nombre de pions du joueur 2 sur le plateau
+     */
     public int calculPiecePlayer2(){
         int score = 0;
         for(int i = 0; i < board.length; i++){
@@ -230,6 +268,10 @@ public class BoardGame {
         return score;
     }
 
+    /**
+     * Permet de calculer le nombre de cases vides sur le plateau
+     * @return Nombre de cases vides sur le plateau
+     */
     public int calculEmptyCase() {
         int emptyCase = 0;
         for(int i = 0; i < board.length; i++){
@@ -245,17 +287,28 @@ public class BoardGame {
         return board;
     }
 
+    public byte[][] cloneBoard(byte[][] board) {
+        byte[][] newBoard = new byte[8][8];
+        for (int i = 0; i < board.length; i++)
+            newBoard[i] = board[i].clone();
+        return newBoard;
+    }
+
     /**
-     * Debug
+     * Affichage du plateau dans la console pour débug
      */
-    public void show() {
+    public void debug() {
         System.out.println("-----");
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length; j++) {
-                String str = String.valueOf(board[j][i]);
-                if (str.length() == 1)
-                    str = " " + str;
-                System.out.print(" " + str);
+                String str;
+                if (board[j][i] == -1)
+                    str = "0";
+                else if (board[j][i] == 0)
+                    str = "b";
+                else
+                    str = "n";
+                System.out.print(str + " ");
             }
             System.out.print("\n");
         }

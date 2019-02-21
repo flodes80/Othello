@@ -1,8 +1,5 @@
 package gamestuff;
 
-import gamestuff.ai.Ai;
-import gamestuff.ai.Node;
-import gamestuff.ai.ScoredMove;
 import javafx.scene.paint.Color;
 
 public class Player {
@@ -17,12 +14,6 @@ public class Player {
         this.name = name;
         this.color = color;
         this.ai = ai;
-    }
-
-    public ScoredMove getAiPlay(int colPlayerPlayed, int rowPlayerPlayed, BoardGame boardGame) {
-        byte playerValue = (byte) 0;
-        Node node = new Node(playerValue, colPlayerPlayed, rowPlayerPlayed, boardGame);
-        return Ai.alphaBeta(node, 30, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     public boolean isAi() {

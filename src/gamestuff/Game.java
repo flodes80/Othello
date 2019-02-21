@@ -1,6 +1,6 @@
 package gamestuff;
 
-import gamestuff.ai.ScoredMove;
+import gamestuff.ai.Ai;
 import gui.controllers.GameController;
 import javafx.scene.paint.Color;
 
@@ -52,7 +52,6 @@ public class Game {
             placed = boardGame.add((byte) 0, colonne, ligne);
         else
             placed = boardGame.add((byte) 1, colonne, ligne);
-
         // Si le pion a été placé
         if (placed) {
             // Mise à jour des scores des joueurs
@@ -78,8 +77,8 @@ public class Game {
 
                 // On fait jouer l'ia
                 if (currentPlayer == player2 && player2.isAi()) {
-                    ScoredMove move = player2.getAiPlay(colonne, ligne, getBoardGame());
-                    play(move.getCol(), move.getRow());
+                    int[] move = Ai.move((byte) 0, colonne, ligne, getBoardGame(), 5); // On demande à l'ia de nous donner son coup à jouer
+                    play(move[0], move[1]);
                 }
             }
 
