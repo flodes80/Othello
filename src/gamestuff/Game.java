@@ -1,5 +1,6 @@
 package gamestuff;
 
+import gamestuff.ai.ScoredMove;
 import gui.controllers.GameController;
 import javafx.scene.paint.Color;
 
@@ -74,6 +75,12 @@ public class Game {
 
                 // Requête d'affichage des mouvements disponibles
                 gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
+
+                // On fait jouer l'ia
+                if (currentPlayer == player2 && player2.isAi()) {
+                    ScoredMove move = player2.getAiPlay(colonne, ligne, getBoardGame());
+                    play(move.getCol(), move.getRow());
+                }
             }
 
         }

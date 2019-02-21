@@ -20,6 +20,13 @@ public class BoardGame {
         board[4][4] = 0;
     }
 
+    public BoardGame(byte[][] board) {
+        this.board = new byte[8][8];
+        for (int i = 0; i < board.length; i++) {
+            this.board[i] = board[i].clone();
+        }
+    }
+
     /**
      * Ajout d'un pion sur le plateau
      *
@@ -232,5 +239,26 @@ public class BoardGame {
             }
         }
         return emptyCase;
+    }
+
+    public byte[][] getBoard() {
+        return board;
+    }
+
+    /**
+     * Debug
+     */
+    public void show() {
+        System.out.println("-----");
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                String str = String.valueOf(board[j][i]);
+                if (str.length() == 1)
+                    str = " " + str;
+                System.out.print(" " + str);
+            }
+            System.out.print("\n");
+        }
+        System.out.println("-----");
     }
 }

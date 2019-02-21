@@ -2,7 +2,6 @@ package gui.controllers;
 
 import gamestuff.Game;
 import gamestuff.Player;
-import gamestuff.ai.Ai;
 import gamestuff.ai.Difficulty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -64,17 +63,16 @@ public class SousMenuController implements Initializable{
             System.out.println("vide");
         } else {
             mainController.launchGame(new Game(
-                    new Player(textFieldJ1.getText(), Color.WHITE),
-                    new Player(textFieldJ2.getText(), Color.BLACK)));
+                    new Player(textFieldJ1.getText(), Color.WHITE, false),
+                    new Player(textFieldJ2.getText(), Color.BLACK, false)));
         }
     }
 
     @FXML
     private void handleButtonValidateJvsIAAction() {
         mainController.launchGame(new Game(
-                new Player(textFieldJ1.getText(), Color.WHITE),
-                new Player("Ordinateur", Color.BLACK)));
-        mainController.getGame().getPlayer2().setAi(new Ai(mainController.getGame()));
+                new Player(textFieldJ1.getText(), Color.WHITE, false),
+                new Player("Ordinateur", Color.BLACK, true)));
     }
 
     private void backToMainMenu(AnchorPane p_anchorPane) throws IOException {

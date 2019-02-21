@@ -8,6 +8,7 @@ public class Node {
     private BoardGame boardGame;
     private int col, row;
     private byte value, enemyValue;
+
     // Sert à connaitre le dernier enfant parcouru pour obtenir le noeud frère
     private int lastColChildren, lastRowChildren;
 
@@ -16,7 +17,8 @@ public class Node {
         this.enemyValue = value == 0 ? (byte) 1 : (byte) 0;
         this.col = col;
         this.row = row;
-        this.boardGame = boardGame;
+        this.boardGame = new BoardGame(boardGame.getBoard());
+        enemyAvailablesMoves = this.boardGame.getAvailablesMoves(enemyValue);
     }
 
     /**

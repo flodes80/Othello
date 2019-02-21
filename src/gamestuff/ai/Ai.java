@@ -1,45 +1,47 @@
 package gamestuff.ai;
 
-import gamestuff.BoardGame;
-import gamestuff.Game;
-
 public class Ai {
 
-    private Game game;
-    private BoardGame boardGame;
-
-    public Ai(Game game) {
-        this.game = game;
-        this.boardGame = game.getBoardGame();
-    }
-
-    public int alphaBeta(Node node, int prof, int alpha, int beta) {
-        int m, nbr;
-        if (node.isALeaf())
-            return node.getSelfEvaluation();
+    public static ScoredMove alphaBeta(Node node, int prof, int alpha, int beta) {
+        int nbr;
+        ScoredMove move = new ScoredMove();
+        if (node.isALeaf() || prof == 0)
+            return move;
         else {
             if (node.isMaxNode()) {
-                m = Integer.MIN_VALUE;
+
+                move.setValue(Integer.MIN_VALUE);
                 nbr = node.getChildrensNodesAmount();
                 Node f = node.getFirstChildrenNode();
-                while (m < beta && nbr != 0) {
-                    m = Integer.max(m, alphaBeta(f, prof - 1, alpha, beta));
-                    alpha = Integer.max(alpha, m);
+
+                while (move.getValue() < beta && nbr != 0) {
+                    if (f == null)
+                        break;
+                    move.setCol(f.getCol());
+                    move.setRow(f.getRow());
+                    move.setValue(Integer.max(move.getValue(), alphaBeta(f, prof - 1, alpha, beta).getValue()));
+                    alpha = Integer.max(alpha, move.getValue());
                     nbr--;
                     f = node.getBrotherNode();
                 }
             } else {
-                m = Integer.MAX_VALUE;
+
+                move.setValue(Integer.MAX_VALUE);
                 nbr = node.getChildrensNodesAmount();
                 Node f = node.getFirstChildrenNode();
-                while (m > alpha && nbr != 0) {
-                    m = Integer.min(m, alphaBeta(f, prof - 1, alpha, beta));
-                    beta = Integer.min(beta, m);
+
+                while (move.getValue() > alpha && nbr != 0) {
+                    if (f == null)
+                        break;
+                    move.setCol(f.getCol());
+                    move.setRow(f.getRow());
+                    move.setValue(Integer.min(move.getValue(), alphaBeta(f, prof - 1, alpha, beta).getValue()));
+                    beta = Integer.min(beta, move.getValue());
                     nbr--;
                     f = node.getBrotherNode();
                 }
             }
         }
-        return m;
+        return move;
     }
 }

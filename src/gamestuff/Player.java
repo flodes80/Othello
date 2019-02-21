@@ -1,29 +1,32 @@
 package gamestuff;
 
 import gamestuff.ai.Ai;
+import gamestuff.ai.Node;
+import gamestuff.ai.ScoredMove;
 import javafx.scene.paint.Color;
 
 public class Player {
 
     private String name;
-    private Ai ai;
+    private boolean ai;
     private Color color;
     private int score;
     private int wins;
 
-    public Player(String name, Color color) {
+    public Player(String name, Color color, boolean ai) {
         this.name = name;
         this.color = color;
+        this.ai = ai;
     }
 
-    public byte[] getAiPlay(BoardGame boardGame) {
-        byte[] move = new byte[2];
-
-        return move;
+    public ScoredMove getAiPlay(int colPlayerPlayed, int rowPlayerPlayed, BoardGame boardGame) {
+        byte playerValue = (byte) 0;
+        Node node = new Node(playerValue, colPlayerPlayed, rowPlayerPlayed, boardGame);
+        return Ai.alphaBeta(node, 30, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     public boolean isAi() {
-        return ai != null;
+        return ai;
     }
 
     public String getName() {
@@ -34,7 +37,7 @@ public class Player {
         this.name = name;
     }
 
-    public void setAi(Ai ai) {
+    public void setAi(boolean ai) {
         this.ai = ai;
     }
 
