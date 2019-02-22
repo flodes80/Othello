@@ -7,10 +7,7 @@ import gamestuff.SaveData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -18,9 +15,6 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.ResourceBundle;
 
 public class MenuPrincipalController {
 
@@ -78,8 +72,8 @@ public class MenuPrincipalController {
 
         // Parametrage de la partie
         Player currentPlayer;
-        Player player1 = new Player(s_player1, false, Color.WHITE);
-        Player player2 = new Player(s_player2, false, Color.BLACK);
+        Player player1 = new Player(s_player1, Color.WHITE, false);
+        Player player2 = new Player(s_player2, Color.BLACK, false);
 
         // On determine quel joueur doit commencer
         currentPlayer = (s_currentPlayer.equals(s_player1)) ? player1 : player2;

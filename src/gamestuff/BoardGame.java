@@ -50,7 +50,6 @@ public class BoardGame {
             if (!isAiBoardGame())
                 gameController.addNewDisk(value, colonne, ligne);
             revertPions(value, colonne, ligne);
-            gameController.soundFlipDisk(); // Joue le son
             return true;
         }
         return false;
@@ -286,6 +285,10 @@ public class BoardGame {
 
     public byte[][] getBoard() {
         return board;
+    }
+
+    public void setBoard(byte[][] board) {
+        this.board = board;
     }
 
     public byte[][] cloneBoard(byte[][] board) {

@@ -2,18 +2,21 @@ package gamestuff;
 
 import gamestuff.ai.AiService;
 import gui.controllers.GameController;
-import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
-
-import java.io.File;
 
 public class Game {
 
     private Player player1, player2, currentPlayer;
     private BoardGame boardGame;
     private GameController gameController;
+
+    public Game(Player player1, Player player2, byte[][] board, Player currentPlayer) {
+        this.player1 = player1;
+        this.player2 = player2;
+        boardGame = new BoardGame();
+        boardGame.setBoard(board);
+        this.currentPlayer = currentPlayer;
+    }
 
     public Game(Player player1, Player player2){
         this.player1 = player1;
@@ -141,6 +144,10 @@ public class Game {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public GameController getGameController() {
+        return gameController;
     }
 
     public void setGameController(GameController gameController) {

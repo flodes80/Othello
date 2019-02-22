@@ -1,6 +1,5 @@
 package gui.controllers;
 
-import gamestuff.Player;
 import gamestuff.ResourceManager;
 import gamestuff.SaveData;
 import javafx.animation.Interpolator;
@@ -33,10 +32,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -119,6 +117,7 @@ public class GameController implements Initializable {
     public void addNewDisk(byte value, int colonne, int ligne) {
         boolean blackSideUp = value != 0;
         gridPaneGame.add(createDisk(blackSideUp), colonne, ligne);
+        soundFlipDisk();
     }
 
     private Group createDisk(boolean blackSideUp) {
@@ -306,7 +305,7 @@ public class GameController implements Initializable {
     }
 
 
-    public void soundFlipDisk() {
+    private void soundFlipDisk() {
         AudioClip sound = new AudioClip(this.getClass().getResource("/sound/piece_pose_flip.mp3").toExternalForm());
         sound.play();
     }
