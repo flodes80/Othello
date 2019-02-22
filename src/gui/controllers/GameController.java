@@ -17,6 +17,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -59,6 +60,9 @@ public class GameController implements Initializable {
     @FXML
     AnchorPane anchorPane;
 
+    @FXML
+    ProgressIndicator aiIndicator;
+
     private Image hint;
 
     private MainController mainController;
@@ -76,6 +80,10 @@ public class GameController implements Initializable {
 
     @FXML
     private void clickGrid(MouseEvent event) {
+        // Si on essaie de jouer à la place de l'ia
+        if (mainController.getGame().getCurrentPlayer() == mainController.getGame().getPlayer2() && mainController.getGame().getCurrentPlayer().isAi())
+            return;
+
         double xSource = event.getSceneX();
         double ySource = event.getSceneY();
         for (Node children : gridPaneGame.getChildren()) {
@@ -91,6 +99,22 @@ public class GameController implements Initializable {
         }
     }
 
+
+    @FXML
+    private void clickRegles(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/gui/interfaces/Rules.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setTitle("Othello : Règles");
+            stage.getIcons().add(new Image("img/icon.png"));
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            System.out.println("erreur");
+        }
+    }
 
     public void addNewDisk(byte value, int colonne, int ligne) {
         boolean blackSideUp = value != 0;
@@ -153,7 +177,16 @@ public class GameController implements Initializable {
         rotation.setFromAngle(toBlack ? 180.0f : 0.0f);
         rotation.setToAngle(toBlack ? 0.0f : 180.0f);
 
+        // Souleve le pion pour ne pas qu'il passe en dessous de la "map"
+        TranslateTransition translation = new TranslateTransition(Duration.millis(200), disk);
+
+        translation.setAutoReverse(true);
+        translation.setByZ(-70.0f);
+        translation.setCycleCount(2);
+        translation.setInterpolator(Interpolator.EASE_OUT);
+
         rotation.play();
+        translation.play();
     }
 
     public void showWinFrame(String winner) {
@@ -228,6 +261,11 @@ public class GameController implements Initializable {
         this.mainController = mainController;
         labelJoueur1.setText(mainController.getGame().getPlayer1().getName());
         labelJoueur2.setText(mainController.getGame().getPlayer2().getName());
+        // Indicateur pour l'IA
+        if (mainController.getGame().getPlayer2().isAi()) {
+            aiIndicator.setDisable(false);
+            aiIndicator.setVisible(false);
+        }
     }
 
     private Group getGroupFromGridPane(int col, int ligne) {
@@ -239,21 +277,8 @@ public class GameController implements Initializable {
         return null;
     }
 
-
-    @FXML
-    private void clickRegles(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/gui/interfaces/Rules.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            Stage stage = new Stage();
-            stage.setTitle("Othello : Règles");
-            stage.getIcons().add(new Image("img/icon.png"));
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            System.out.println("erreur");
-        }
+    public ProgressIndicator getAiIndicator() {
+        return aiIndicator;
     }
 
     // Sauvegarder une partie

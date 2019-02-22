@@ -12,10 +12,14 @@ public class Player  {
     private int score;
     private int wins;
 
-    public Player(String name, boolean ai, Color color){
+    public Player(String name, Color color, boolean ai) {
         this.name = name;
-        this.ai = ai;
         this.color = color;
+        this.ai = ai;
+    }
+
+    public boolean isAi() {
+        return ai;
     }
 
     public String getName() {
@@ -26,8 +30,8 @@ public class Player  {
         this.name = name;
     }
 
-    public boolean isAi() {
-        return ai;
+    public void setAi(boolean ai) {
+        this.ai = ai;
     }
 
 

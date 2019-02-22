@@ -1,5 +1,6 @@
 package gamestuff;
 
+import gamestuff.ai.AiService;
 import gui.controllers.GameController;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
@@ -10,12 +11,8 @@ import java.io.File;
 
 public class Game {
 
-    private Player player1, player2;
-
-    private Player currentPlayer;
-
+    private Player player1, player2, currentPlayer;
     private BoardGame boardGame;
-
     private GameController gameController;
 
     public Game(Player player1, Player player2){
@@ -24,30 +21,6 @@ public class Game {
         boardGame = new BoardGame();
         currentPlayer = player1;
     }
-
-    // Constructeur chargement de partie sauvegardé
-    public Game(Player player1, Player player2, byte[][] board, Player currentPlayer){
-        this.player1 = player1;
-        this.player2 = player2;
-        boardGame = new BoardGame();
-        boardGame.setBoard(board);
-        this.currentPlayer = currentPlayer;
-    }
-
-    public Player getPlayer1() {
-        return player1;
-    }
-
-    public Player getPlayer2() {
-        return player2;
-    }
-
-    public void setGameController(GameController gameController){
-        this.gameController = gameController;
-        boardGame.setGameController(gameController);
-        gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
-    }
-
 
     /**
      * Jouer un pion
@@ -64,7 +37,6 @@ public class Game {
             placed = boardGame.add((byte) 0, colonne, ligne);
         else
             placed = boardGame.add((byte) 1, colonne, ligne);
-
         // Si le pion a été placé
         if (placed) {
             // Mise à jour des scores des joueurs
@@ -87,6 +59,15 @@ public class Game {
 
                 // Requête d'affichage des mouvements disponibles
                 gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
+
+                // On fait jouer l'ia
+                if (currentPlayer == player2 && player2.isAi()) {
+                    // On indique que l'ia est en train de chercher un coup
+                    gameController.getAiIndicator().setVisible(true);
+
+                    AiService aiService = new AiService((byte) 0, colonne, ligne, 10, this, gameController);
+                    aiService.start();
+                }
             }
 
         }
@@ -144,15 +125,28 @@ public class Game {
         return player == player1 ? (byte) 0 : (byte) 1;
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
     }
 
     public BoardGame getBoardGame() {
         return boardGame;
     }
 
-    public GameController getGameController() {
-        return gameController;
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+        boardGame.setGameController(gameController);
+        gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
+    }
+
 }
