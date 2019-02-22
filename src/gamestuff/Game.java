@@ -1,13 +1,12 @@
 package gamestuff;
 
-import gamestuff.ai.Ai;
+import gamestuff.ai.AiService;
 import gui.controllers.GameController;
 import javafx.scene.paint.Color;
 
 public class Game {
 
-    private Player player1, player2;
-    private Player currentPlayer;
+    private Player player1, player2, currentPlayer;
     private BoardGame boardGame;
     private GameController gameController;
 
@@ -18,25 +17,6 @@ public class Game {
         currentPlayer = player1;
     }
 
-    public Player getPlayer1() {
-        return player1;
-    }
-
-    public Player getPlayer2() {
-        return player2;
-    }
-
-    public BoardGame getBoardGame() {
-        return boardGame;
-    }
-
-    public void setGameController(GameController gameController){
-        this.gameController = gameController;
-        boardGame.setGameController(gameController);
-        gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
-    }
-
-
     /**
      * Jouer un pion
      *
@@ -44,6 +24,7 @@ public class Game {
      * @param ligne   ligne jouée
      */
     public void play(int colonne, int ligne){
+
         // Booléen permettant de savoir si le pion à été placé ou non
         boolean placed;
 
@@ -77,8 +58,11 @@ public class Game {
 
                 // On fait jouer l'ia
                 if (currentPlayer == player2 && player2.isAi()) {
-                    int[] move = Ai.move((byte) 0, colonne, ligne, getBoardGame(), 5); // On demande à l'ia de nous donner son coup à jouer
-                    play(move[0], move[1]);
+                    // On indique que l'ia est en train de chercher un coup
+                    gameController.getAiIndicator().setVisible(true);
+
+                    AiService aiService = new AiService((byte) 0, colonne, ligne, 10, this, gameController);
+                    aiService.start();
                 }
             }
 
@@ -135,6 +119,30 @@ public class Game {
 
     private byte getPlayerValue(Player player) {
         return player == player1 ? (byte) 0 : (byte) 1;
+    }
+
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
+
+    public BoardGame getBoardGame() {
+        return boardGame;
+    }
+
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+        boardGame.setGameController(gameController);
+        gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
     }
 
 }

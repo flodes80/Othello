@@ -2,6 +2,7 @@ package gui.controllers;
 
 import gamestuff.Game;
 import gamestuff.Player;
+import gamestuff.ai.Ai;
 import gamestuff.ai.Difficulty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,6 +74,7 @@ public class SousMenuController implements Initializable{
         mainController.launchGame(new Game(
                 new Player(textFieldJ1.getText(), Color.WHITE, false),
                 new Player("Ordinateur", Color.BLACK, true)));
+        Ai.difficulty = Difficulty.getDifficulty((int) sliderIA.getValue());
     }
 
     private void backToMainMenu(AnchorPane p_anchorPane) throws IOException {

@@ -4,6 +4,8 @@ import gamestuff.BoardGame;
 
 public class Ai {
 
+    public static Difficulty difficulty;
+
     /**
      * Cette fonction permet de retourner le "meilleur mouvement" selon l'ia
      *
@@ -11,10 +13,9 @@ public class Ai {
      * @param col         Colonne à jouer sur le plateau passé en paramètre
      * @param row         Ligne à jouer sur le plateau passé en paramètre
      * @param boardGame   Situation de plateau "actuelle" sur laquelle doit se baser l'algo
-     * @param depth       profondeur maximale de recherche
      * @return Un tableau de trois entiers comprenant en 1ère position la colonne à jouer, en 2ème la ligne à jouer et en 3ème le score attribué à ce "move" par l'ia
      */
-    public static int[] move(byte valueToPlay, int col, int row, BoardGame boardGame, int depth) {
+    public static int[] move(byte valueToPlay, int col, int row, BoardGame boardGame) {
         int[] bestMove = new int[3];
         bestMove[2] = Integer.MIN_VALUE;  // On cherche à maximiser les gains de l'ordinateur donc on initialise le score à -INFINI
 
@@ -24,7 +25,7 @@ public class Ai {
         // On parcours coups possibles pour l'ordinateur
         for (Node child : nodeRoot.getChildrensNodes()) {
             // On attribue un score à ces coups
-            int alpha = alphaBeta(child, depth - 1, bestMove[2], Integer.MAX_VALUE);
+            int alpha = alphaBeta(child, difficulty.getDepth() - 1, bestMove[2], Integer.MAX_VALUE);
 
             // Si le coup possède un meilleur score que précédemment on le choisi
             if (alpha > bestMove[2]) {
@@ -43,15 +44,15 @@ public class Ai {
      * Algorithme Alpha Beta permettant d'obtenir le meilleur coup à jouer
      *
      * @param node  Noeud à partir duquel l'algo
-     * @param prof  Profondeur maximale pour limiter le temps de recherche
+     * @param depth  Profondeur maximale pour limiter le temps de recherche
      * @param alpha Borne inférieure
      * @param beta  Borne supérieure
      * @return Un Node comprenant le mouvement "sélectionné" ainsi que sa valeur attribuée.
      */
-    public static int alphaBeta(Node node, int prof, int alpha, int beta) {
+    public static int alphaBeta(Node node, int depth, int alpha, int beta) {
         int m;
         // Si le noeud est une feuille ou que la profondeur maximale est atteinte on retourne une évaluation de la situation
-        if (node.isALeaf() || prof == 0) {
+        if (node.isALeaf() || depth == 0) {
             return node.getSelfEvaluation();
         }
 
@@ -67,7 +68,7 @@ public class Ai {
                 for (Node children : node.getChildrensNodes()) {
 
                     // Nous sommes dans un noeud max donc nous cherchons la plus haute valeur dans ses noeuds fils
-                    m = Integer.max(m, alphaBeta(children, prof - 1, alpha, beta));
+                    m = Integer.max(m, alphaBeta(children, depth - 1, alpha, beta));
 
                     // La valeur trouvée pour un fils est supérieure au beta que le noeud parent à transmis ici
                     // On arrête la recherche ici car le noeud parent cherche à minimiser, et l'on vient de trouver une valeur supérieure
@@ -90,7 +91,7 @@ public class Ai {
                 for (Node children : node.getChildrensNodes()) {
 
                     // Nous sommes dans un noeud min donc nous cherchons la plus petite valeur dans ses noeuds fils
-                    m = Integer.min(m, alphaBeta(children, prof - 1, alpha, beta));
+                    m = Integer.min(m, alphaBeta(children, depth - 1, alpha, beta));
 
                     // La valeur trouvée pour un fils est inférieure au alpha que le noeud parent à transmis ici
                     // On arrête la recherche ici car le noeud parent cherche à maximiser, et l'on vient de trouver une valeur inférieure

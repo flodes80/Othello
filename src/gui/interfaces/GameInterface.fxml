@@ -155,5 +155,8 @@
          <font>
             <Font name="Bodoni MT" size="105.0" />
          </font></Label>
+       <ProgressIndicator fx:id="aiIndicator" disable="true" layoutX="1165.0" layoutY="65.0" prefWidth="289.0"
+                          AnchorPane.bottomAnchor="602.0" AnchorPane.leftAnchor="1165.0" AnchorPane.rightAnchor="63.0"
+                          AnchorPane.topAnchor="65.0"/>
    </children>
 </AnchorPane>

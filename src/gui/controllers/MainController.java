@@ -70,10 +70,6 @@ public class MainController{
         return game;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
     public void setSousMenuController(SousMenuController sousMenuController) {
         sousMenuController.setMainController(this);
         this.sousMenuController = sousMenuController;
