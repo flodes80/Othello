@@ -1,5 +1,7 @@
 package gui.controllers;
 
+import gamestuff.Game;
+import gamestuff.Player;
 import gamestuff.ResourceManager;
 import gamestuff.SaveData;
 import javafx.animation.RotateTransition;
@@ -12,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
@@ -38,7 +41,7 @@ import java.util.ResourceBundle;
 public class GameController implements Initializable {
 
     @FXML
-    Label labelJoueur1, labelJoueur2, labelWinnerName;
+    Label labelJoueur1, labelJoueur2, labelWinnerName, labelScoreJ1, labelScoreJ2;;
 
     @FXML
     ImageView imageGameOver;
@@ -50,7 +53,7 @@ public class GameController implements Initializable {
     Rectangle rectangleJoueur1, rectangleJoueur2;
 
     @FXML
-    Label labelScoreJ1, labelScoreJ2;
+    Button buttonRejouer, buttonQuitter;
 
     @FXML
     AnchorPane anchorPane;
@@ -181,6 +184,8 @@ public class GameController implements Initializable {
         labelWinnerName.setText(winner);
         labelWinnerName.setVisible(true);
         labelWinnerName.setAlignment(Pos.CENTER);
+        buttonQuitter.setVisible(true);
+        buttonRejouer.setVisible(true);
     }
 
     public void showAvailablesMoves(byte[][] availablesMoves, byte valuePlayer) {
@@ -286,6 +291,18 @@ public class GameController implements Initializable {
         }
     }
 
+    @FXML
+    private void buttonRejouerAction() {
+        mainController.getGameStage().close();
+        mainController.launchGame(new Game(
+                new Player(labelJoueur1.getText(), Color.WHITE, false),
+                new Player(labelJoueur2.getText(), Color.BLACK, false)));
+    }
+
+    @FXML
+    private void buttonQuitterAction() {
+        mainController.getGameStage().close();
+    }
 
     private void soundFlipDisk() {
         AudioClip sound = new AudioClip(this.getClass().getResource("/sound/piece_pose_flip.mp3").toExternalForm());

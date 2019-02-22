@@ -3,3 +3,36 @@
     -fx-background-size: stretch, auto;
 }
 
+.glass-grey {
+    -fx-background-color:
+        #c3c4c4,
+        linear-gradient(#f4f4f4 20%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #f2f2f2 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
+
+
+.glass-grey:hover{
+    -fx-background-color:
+            #eff2f2,
+            linear-gradient(#f4f4f4 20%, white 100%),
+            radial-gradient(center 50% -40%, radius 200%, #f2f2f2 45%, rgba(230,230,230,0) 50%);
+        -fx-background-radius: 30;
+        -fx-background-insets: 0,1,1;
+        -fx-text-fill: black;
+        -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 9, 0.0 , 0 , 1 );
+}
+
+.glass-grey:pressed {
+-fx-background-color:
+            #c4c4c4,
+            linear-gradient(#f4f4f4 20%, white 100%),
+            radial-gradient(center 50% -40%, radius 200%, #f2f2f2 45%, rgba(230,230,230,0) 50%);
+        -fx-background-radius: 30;
+        -fx-background-insets: 0,1,1;
+        -fx-text-fill: black;
+        -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+}
