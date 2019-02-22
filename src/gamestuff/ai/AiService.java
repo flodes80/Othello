@@ -10,31 +10,33 @@ import javafx.concurrent.Task;
  */
 public class AiService extends Service<int[]> {
 
-    private byte value;
-    private int colonne, ligne, depth;
+    private int colonne, ligne;
     private Game game;
     private GameController gameController;
+    private long time;
+    private boolean debug;
 
-    public AiService(byte value, int colonne, int ligne, int depth, Game game, GameController gameController) {
-        this.value = value;
+    public AiService(int colonne, int ligne, Game game, GameController gameController, boolean debug) {
         this.colonne = colonne;
         this.ligne = ligne;
-        this.depth = depth;
         this.game = game;
         this.gameController = gameController;
+        this.debug = debug;
 
         // Méthode appellée lorsque la tâche est finie
         setOnSucceeded(event -> {
+            if (debug) System.out.println("Took " + (System.currentTimeMillis() - time) + "ms");
             int[] move = getValue();
             gameController.getAiIndicator().setVisible(false);
             game.play(move[0], move[1]);
+            if (debug) System.out.println("Final move: " + move[0] + " " + move[1] + " " + move[2]);
         });
     }
 
     /**
      * Création de la tâche
      *
-     * @return
+     * @return Le mouvement à jouer
      */
     @Override
     protected Task<int[]> createTask() {
@@ -48,6 +50,7 @@ public class AiService extends Service<int[]> {
             @Override
             protected int[] call() {
                 gameController.getAiIndicator().setVisible(true);
+                if (debug) time = System.currentTimeMillis();
                 return Ai.move((byte) 0, colonne, ligne, game.getBoardGame());
             }
         };

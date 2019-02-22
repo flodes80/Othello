@@ -4,7 +4,6 @@ import gamestuff.Game;
 import gamestuff.Player;
 import gamestuff.ai.Ai;
 import gamestuff.ai.Difficulty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

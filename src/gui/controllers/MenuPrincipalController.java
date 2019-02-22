@@ -52,7 +52,7 @@ public class MenuPrincipalController {
 
     // Chargement d'une partie
     @FXML
-    private void handleButtonChargerAction(ActionEvent event) throws IOException {
+    private void handleButtonChargerAction(ActionEvent event) {
         byte[][] loadedBoard = new byte[0][];
         String s_player1 = null, s_player2 = null, s_currentPlayer = null;
 

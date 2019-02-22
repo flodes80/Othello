@@ -24,8 +24,10 @@ public class Ai {
 
         // On parcours coups possibles pour l'ordinateur
         for (Node child : nodeRoot.getChildrensNodes()) {
+
             // On attribue un score à ces coups
-            int alpha = alphaBeta(child, difficulty.getDepth() - 1, bestMove[2], Integer.MAX_VALUE);
+            //int alpha = alphaBeta(child, difficulty.getDepth() - 1, bestMove[2], Integer.MAX_VALUE); // AlphaBeta
+            int alpha = mtd(child, difficulty.getDepth() - 1, bestMove[2]); // MTD
 
             // Si le coup possède un meilleur score que précédemment on le choisi
             if (alpha > bestMove[2]) {
@@ -41,15 +43,42 @@ public class Ai {
     }
 
     /**
+     * Algorithme MTD basé sur Alpha Beta
+     *
+     * @param node   Noeud à partir duquel l'algo
+     * @param depth  Profondeur maximale pour limiter le temps de recherche
+     * @param init_g borne actuelle
+     * @return La valeur du noeud testé
+     */
+    private static int mtd(Node node, int depth, int init_g) {
+        int g = init_g;
+        int haut = Integer.MAX_VALUE;
+        int bas = Integer.MIN_VALUE;
+        while (haut > bas) {
+            int beta;
+            if (g == bas)
+                beta = g + 1;
+            else
+                beta = g;
+            g = alphaBeta(node, depth, beta - 1, beta);
+            if (g < beta)
+                haut = g;
+            else
+                bas = g;
+        }
+        return g;
+    }
+
+    /**
      * Algorithme Alpha Beta permettant d'obtenir le meilleur coup à jouer
      *
      * @param node  Noeud à partir duquel l'algo
      * @param depth  Profondeur maximale pour limiter le temps de recherche
      * @param alpha Borne inférieure
      * @param beta  Borne supérieure
-     * @return Un Node comprenant le mouvement "sélectionné" ainsi que sa valeur attribuée.
+     * @return La valeur du noeud testé
      */
-    public static int alphaBeta(Node node, int depth, int alpha, int beta) {
+    private static int alphaBeta(Node node, int depth, int alpha, int beta) {
         int m;
         // Si le noeud est une feuille ou que la profondeur maximale est atteinte on retourne une évaluation de la situation
         if (node.isALeaf() || depth == 0) {

@@ -5,30 +5,32 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchorPaneMain" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="720.0"
+            prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1"
+            fx:controller="gui.controllers.MenuPrincipalController">
+    <Button fx:id="buttonBackArrow" layoutX="34.0" layoutY="32.0" mnemonicParsing="false" prefHeight="70.0"
+            prefWidth="76.0"/>
+    <ImageView fx:id="imageViewMenu" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../../img/menu.jpg"/>
+    </ImageView>
+    <Button fx:id="buttonJouerLocal" layoutX="324.0" layoutY="382.0" mnemonicParsing="false"
+            onAction="#handleButtonLocalAction" prefHeight="82.0" prefWidth="631.0" text="Jouer en local">
+        <font>
+            <Font name="Century Schoolbook" size="42.0"/>
+        </font>
+    </Button>
+    <Button fx:id="buttonJouerIA" layoutX="324.0" layoutY="490.0" mnemonicParsing="false"
+            onAction="#handleButtonIAAction" prefHeight="82.0" prefWidth="631.0" text="Jouer contre l'IA">
+        <font>
+            <Font name="Century Schoolbook" size="42.0"/>
+        </font>
+    </Button>
+    <Button fx:id="buttonChargerPartie" layoutX="324.0" layoutY="600.0" mnemonicParsing="false"
+            onAction="#handleButtonChargerAction" prefHeight="82.0" prefWidth="630.0" text="Charger une partie">
+        <font>
+            <Font name="Century Schoolbook" size="42.0"/>
+        </font>
+    </Button>
 
-<AnchorPane fx:id="anchorPaneMain" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controllers.MenuPrincipalController">
-   <children>
-      <Button fx:id="buttonBackArrow" layoutX="34.0" layoutY="32.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="76.0" />
-      <ImageView fx:id="imageViewMenu" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../img/menu.jpg" />
-         </image>
-      </ImageView>
-      <Button fx:id="buttonJouerLocal" layoutX="324.0" layoutY="382.0" mnemonicParsing="false" onAction="#handleButtonLocalAction" prefHeight="82.0" prefWidth="631.0" text="Jouer en local">
-         <font>
-            <Font name="Century Schoolbook" size="42.0" />
-         </font>
-      </Button>
-      <Button fx:id="buttonJouerIA" layoutX="324.0" layoutY="490.0" mnemonicParsing="false" onAction="#handleButtonIAAction" prefHeight="82.0" prefWidth="631.0" text="Jouer contre l'IA">
-         <font>
-            <Font name="Century Schoolbook" size="42.0" />
-         </font>
-      </Button>
-      <Button fx:id="buttonChargerPartie" layoutX="324.0" layoutY="600.0" mnemonicParsing="false" onAction="#handleButtonChargerAction" prefHeight="82.0" prefWidth="630.0" text="Charger une partie">
-         <font>
-            <Font name="Century Schoolbook" size="42.0" />
-         </font>
-      </Button>
-
-   </children>
 </AnchorPane>

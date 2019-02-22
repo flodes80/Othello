@@ -2,11 +2,8 @@ package gui.controllers;
 
 import gamestuff.ResourceManager;
 import gamestuff.SaveData;
-import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -99,7 +96,7 @@ public class GameController implements Initializable {
 
 
     @FXML
-    private void clickRegles(ActionEvent event) {
+    private void clickRegles() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/gui/interfaces/Rules.fxml"));
@@ -176,16 +173,7 @@ public class GameController implements Initializable {
         rotation.setFromAngle(toBlack ? 180.0f : 0.0f);
         rotation.setToAngle(toBlack ? 0.0f : 180.0f);
 
-        // Souleve le pion pour ne pas qu'il passe en dessous de la "map"
-        TranslateTransition translation = new TranslateTransition(Duration.millis(200), disk);
-
-        translation.setAutoReverse(true);
-        translation.setByZ(-70.0f);
-        translation.setCycleCount(2);
-        translation.setInterpolator(Interpolator.EASE_OUT);
-
         rotation.play();
-        translation.play();
     }
 
     public void showWinFrame(String winner) {
@@ -224,13 +212,7 @@ public class GameController implements Initializable {
     }
 
     public void removeAll() {
-        Iterator<Node> iter = gridPaneGame.getChildren().iterator();
-        while (iter.hasNext()) {
-            Node node = iter.next();
-            if (node instanceof Group) {
-                iter.remove();
-            }
-        }
+        gridPaneGame.getChildren().removeIf(node -> node instanceof Group);
     }
 
     public void placeDisksAccordingToBoard(byte[][] board) {
@@ -244,7 +226,7 @@ public class GameController implements Initializable {
         }
     }
 
-    public void replaceNodeGridPane(int column, int row, Node newNode) {
+    private void replaceNodeGridPane(int column, int row, Node newNode) {
         // On supprimme d'abord ce qu'il y avait avant à cet emplacement
         ObservableList<Node> childrens = gridPaneGame.getChildren();
         for (Node node : childrens) {
@@ -282,7 +264,7 @@ public class GameController implements Initializable {
 
     // Sauvegarder une partie
     @FXML
-    private void clickSave(ActionEvent event) {
+    private void clickSave() {
         String player1 = mainController.getGame().getPlayer1().getName();
         String player2 = mainController.getGame().getPlayer2().getName();
         String currentPlayer = mainController.getGame().getCurrentPlayer().getName();
@@ -325,13 +307,5 @@ public class GameController implements Initializable {
 
     public Label getLabelScoreJ2() {
         return labelScoreJ2;
-    }
-
-    public Label getLabelWinnerName() {
-        return labelWinnerName;
-    }
-
-    public ImageView getImageGameOver() {
-        return imageGameOver;
     }
 }

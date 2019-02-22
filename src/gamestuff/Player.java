@@ -2,8 +2,6 @@ package gamestuff;
 
 import javafx.scene.paint.Color;
 
-import java.io.Serializable;
-
 public class Player  {
 
     private String name;

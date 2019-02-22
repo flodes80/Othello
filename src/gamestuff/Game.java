@@ -68,7 +68,7 @@ public class Game {
                     // On indique que l'ia est en train de chercher un coup
                     gameController.getAiIndicator().setVisible(true);
 
-                    AiService aiService = new AiService((byte) 0, colonne, ligne, 10, this, gameController);
+                    AiService aiService = new AiService(colonne, ligne, this, gameController, true);
                     aiService.start();
                 }
             }
@@ -80,9 +80,9 @@ public class Game {
     /**
      * Détection de fin de partie si il ne reste plus de cases vides
      *
-     * @return
+     * @return Vrai si la partie est finie
      */
-    public boolean isGameOver() {
+    private boolean isGameOver() {
         return boardGame.calculEmptyCase() == 0;
     }
 
@@ -90,7 +90,7 @@ public class Game {
      * Procédure de fin de partie
      */
     private void gameOver() {
-        String winner = "";
+        String winner;
 
         // Determine le gagnant
         if (boardGame.calculPiecePlayer1() > boardGame.calculPiecePlayer2()) {
