@@ -41,7 +41,7 @@ import java.util.ResourceBundle;
 public class GameController implements Initializable {
 
     @FXML
-    Label labelJoueur1, labelJoueur2, labelWinnerName, labelScoreJ1, labelScoreJ2;;
+    Label labelJoueur1, labelJoueur2, labelWinnerName, labelScoreJ1, labelScoreJ2;
 
     @FXML
     ImageView imageGameOver;
@@ -62,12 +62,13 @@ public class GameController implements Initializable {
     ProgressIndicator aiIndicator;
 
     private Image hint;
-
+    private AudioClip flipSound;
     private MainController mainController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hint = new Image("img/hintDisk.png");
+        flipSound = new AudioClip(this.getClass().getResource("/sound/piece_pose_flip.mp3").toExternalForm());
 
         gridPaneGame.add(createDisk(false), 3, 3);
         gridPaneGame.add(createDisk(true), 4, 3);
@@ -112,6 +113,47 @@ public class GameController implements Initializable {
         } catch (IOException e) {
             System.out.println("erreur");
         }
+    }
+
+    // Sauvegarder une partie
+    @FXML
+    private void clickSave() {
+        String player1 = mainController.getGame().getPlayer1().getName();
+        String player2 = mainController.getGame().getPlayer2().getName();
+        boolean ai = mainController.getGame().getPlayer2().isAi();
+        String currentPlayer = mainController.getGame().getCurrentPlayer().getName();
+        byte[][] board = mainController.getGame().getBoardGame().getBoard();
+
+        SaveData data = new SaveData(player1, player2, currentPlayer, board, ai);
+
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showSaveDialog(null);
+
+        try {
+            ResourceManager.save(data, file.toString());
+        } catch (Exception e) {
+            System.out.println("error :" + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void buttonRejouerAction() {
+        mainController.getGameStage().close();
+        if (mainController.getGame().getPlayer2().isAi()) {
+            mainController.launchGame(new Game(
+                    new Player(labelJoueur1.getText(), Color.WHITE, false),
+                    new Player(labelJoueur2.getText(), Color.BLACK, true))
+            );
+        } else {
+            mainController.launchGame(new Game(
+                    new Player(labelJoueur1.getText(), Color.WHITE, false),
+                    new Player(labelJoueur2.getText(), Color.BLACK, false)));
+        }
+    }
+
+    @FXML
+    private void buttonQuitterAction() {
+        mainController.getGameStage().close();
     }
 
     public void addNewDisk(byte value, int colonne, int ligne) {
@@ -267,46 +309,8 @@ public class GameController implements Initializable {
         return aiIndicator;
     }
 
-    // Sauvegarder une partie
-    @FXML
-    private void clickSave() {
-        String player1 = mainController.getGame().getPlayer1().getName();
-        String player2 = mainController.getGame().getPlayer2().getName();
-        String currentPlayer = mainController.getGame().getCurrentPlayer().getName();
-        byte[][] board = mainController.getGame().getBoardGame().getBoard();
-
-        SaveData data = new SaveData();
-        data.board = board;
-        data.currentPlayer = currentPlayer;
-        data.player1 = player1;
-        data.player2 = player2;
-
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showSaveDialog(null);
-
-        try {
-            ResourceManager.save(data, file.toString());
-        } catch (Exception e) {
-            System.out.println("error :" + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void buttonRejouerAction() {
-        mainController.getGameStage().close();
-        mainController.launchGame(new Game(
-                new Player(labelJoueur1.getText(), Color.WHITE, false),
-                new Player(labelJoueur2.getText(), Color.BLACK, false)));
-    }
-
-    @FXML
-    private void buttonQuitterAction() {
-        mainController.getGameStage().close();
-    }
-
     private void soundFlipDisk() {
-        AudioClip sound = new AudioClip(this.getClass().getResource("/sound/piece_pose_flip.mp3").toExternalForm());
-        sound.play();
+        flipSound.play();
     }
 
 

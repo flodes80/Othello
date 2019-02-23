@@ -4,7 +4,6 @@ import gamestuff.Game;
 import gamestuff.Player;
 import gamestuff.ResourceManager;
 import gamestuff.SaveData;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -25,7 +24,7 @@ public class MenuPrincipalController {
     private MainController mainController;
 
     @FXML
-    private void handleButtonLocalAction(ActionEvent event) throws IOException {
+    private void handleButtonLocalAction() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/interfaces/MenuJvsJ.fxml"));
         Pane registerPane = fxmlLoader.load();
         mainController.setSousMenuController(fxmlLoader.getController());
@@ -38,7 +37,7 @@ public class MenuPrincipalController {
     }
 
     @FXML
-    private void handleButtonIAAction(ActionEvent event) throws IOException {
+    private void handleButtonIAAction() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/gui/interfaces/MenuJvsIA.fxml"));
         Pane registerPane = fxmlLoader.load();
         mainController.setSousMenuController(fxmlLoader.getController());
@@ -52,9 +51,10 @@ public class MenuPrincipalController {
 
     // Chargement d'une partie
     @FXML
-    private void handleButtonChargerAction(ActionEvent event) {
-        byte[][] loadedBoard = new byte[0][];
-        String s_player1 = null, s_player2 = null, s_currentPlayer = null;
+    private void handleButtonChargerAction() {
+        byte[][] loadedBoard;
+        String s_player1, s_player2, s_currentPlayer;
+        boolean s_ai;
 
         //On choisit le fichier et on récupère les données
         FileChooser fileChooser = new FileChooser();
@@ -62,18 +62,20 @@ public class MenuPrincipalController {
 
         try {
             SaveData data = (SaveData) ResourceManager.load(file.toString());
-            loadedBoard = data.board;
-            s_player1 = data.player1;
-            s_player2 = data.player2;
-            s_currentPlayer = data.currentPlayer;
+            loadedBoard = data.getBoard();
+            s_player1 = data.getPlayer1();
+            s_player2 = data.getPlayer2();
+            s_currentPlayer = data.getCurrentPlayer();
+            s_ai = data.isAi();
         } catch (Exception e) {
             System.out.println("error loading : " + e.getMessage());
+            return;
         }
 
         // Parametrage de la partie
         Player currentPlayer;
         Player player1 = new Player(s_player1, Color.WHITE, false);
-        Player player2 = new Player(s_player2, Color.BLACK, false);
+        Player player2 = new Player(s_player2, Color.BLACK, s_ai);
 
         // On determine quel joueur doit commencer
         currentPlayer = (s_currentPlayer.equals(s_player1)) ? player1 : player2;
