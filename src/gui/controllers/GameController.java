@@ -127,6 +127,7 @@ public class GameController implements Initializable {
         SaveData data = new SaveData(player1, player2, currentPlayer, board, ai);
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML (*.xml)", "*.xml"));
         File file = fileChooser.showSaveDialog(null);
 
         try {
