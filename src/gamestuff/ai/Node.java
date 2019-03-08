@@ -88,6 +88,9 @@ public class Node {
      * @return La différence de ses propres pions et de celle de l'adversaire
      */
     public int getSelfEvaluation() {
+        if (boardGame.calculEmptyCase() <= 5)
+            return 100 * (boardGame.calculPiecePlayer2() - boardGame.calculPiecePlayer1()) / (boardGame.calculPiecePlayer2() + boardGame.calculPiecePlayer1());
+
         // On initialise d'abord la valeur avec la parité sur le plateau
         int value = getInitialValue();
 

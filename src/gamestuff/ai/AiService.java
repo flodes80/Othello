@@ -13,7 +13,7 @@ public class AiService extends Service<int[]> {
     private int colonne, ligne;
     private Game game;
     private GameController gameController;
-    private long time;
+    private long time, endTime;
     private boolean debug;
 
     public AiService(int colonne, int ligne, Game game, GameController gameController, boolean debug) {
@@ -25,7 +25,7 @@ public class AiService extends Service<int[]> {
 
         // Méthode appellée lorsque la tâche est finie
         setOnSucceeded(event -> {
-            if (debug) System.out.println("Took " + (System.currentTimeMillis() - time) + "ms");
+            if (debug) System.out.println("Took " + (endTime - time) + "ms");
             int[] move = getValue();
             gameController.getAiIndicator().setVisible(false);
             game.play(move[0], move[1]);
@@ -49,8 +49,20 @@ public class AiService extends Service<int[]> {
              */
             @Override
             protected int[] call() {
-                if (debug) time = System.currentTimeMillis();
-                return Ai.move((byte) 0, colonne, ligne, game.getBoardGame());
+                time = System.currentTimeMillis();
+                int[] move = Ai.move((byte) 0, colonne, ligne, game.getBoardGame());
+                endTime = System.currentTimeMillis();
+
+                // Permet de faire un délai de 2 secondes minimum avant que l'ia joue
+                if (System.currentTimeMillis() - time < 2000 && !debug) {
+                    try {
+                        Thread.sleep(2000 - (System.currentTimeMillis() - time));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return move;
             }
         };
     }

@@ -68,7 +68,7 @@ public class Game {
                     // On indique que l'ia est en train de chercher un coup
                     gameController.getAiIndicator().setVisible(true);
 
-                    AiService aiService = new AiService(colonne, ligne, this, gameController, false);
+                    AiService aiService = new AiService(colonne, ligne, this, gameController, true);
                     aiService.start();
                 }
             }
