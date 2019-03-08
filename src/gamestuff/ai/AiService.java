@@ -49,7 +49,6 @@ public class AiService extends Service<int[]> {
              */
             @Override
             protected int[] call() {
-                gameController.getAiIndicator().setVisible(true);
                 if (debug) time = System.currentTimeMillis();
                 return Ai.move((byte) 0, colonne, ligne, game.getBoardGame());
             }

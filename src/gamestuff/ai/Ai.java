@@ -24,9 +24,7 @@ public class Ai {
 
         // On parcours coups possibles pour l'ordinateur
         for (Node child : nodeRoot.getChildrensNodes()) {
-
             // On attribue un score à ces coups
-            //int alpha = alphaBeta(child, difficulty.getDepth() - 1, bestMove[2], Integer.MAX_VALUE); // AlphaBeta
             int alpha = mtd(child, difficulty.getDepth() - 1, bestMove[2]); // MTD
 
             // Si le coup possède un meilleur score que précédemment on le choisi
@@ -37,7 +35,6 @@ public class Ai {
                 bestMove[2] = alpha;            // Score du move
             }
         }
-
         // Pour finir on retourne le meilleur coup
         return bestMove;
     }

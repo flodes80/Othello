@@ -5,9 +5,9 @@ package gamestuff.ai;
  */
 public enum Difficulty {
 
-    FACILE(4),
-    NORMAL(8),
-    DIFFICILE(12);
+    FACILE(2),
+    NORMAL(4),
+    DIFFICILE(6);
 
     private final int depth;
 
