@@ -62,6 +62,7 @@ public class GameController implements Initializable {
     ProgressIndicator aiIndicator;
 
     private Image hint;
+    private Stage exitStage;
     private AudioClip flipSound;
     private MainController mainController;
 
@@ -154,8 +155,23 @@ public class GameController implements Initializable {
 
     @FXML
     private void buttonQuitterAction() {
-        mainController.getGameStage().close();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/gui/interfaces/Exit.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            ExitController exitController = fxmlLoader.getController();
+            exitController.setMainController(mainController);
+            exitStage = new Stage();
+            exitStage.setTitle("Othello : Quitter ?");
+            exitStage.getIcons().add(new Image("img/icon.png"));
+            exitStage.setScene(scene);
+            exitController.setExitStage(exitStage);
+            exitStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void addNewDisk(byte value, int colonne, int ligne) {
         boolean blackSideUp = value != 0;
