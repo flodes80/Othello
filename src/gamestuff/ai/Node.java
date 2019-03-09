@@ -10,14 +10,14 @@ import java.util.ArrayList;
 public class Node {
 
     private final static int[][] vMap = {
-            {20, -3, 11, 8, 8, 11, -3, 20},
-            {-3, -7, -4, 1, 1, -4, -7, -3},
-            {11, -4, 2, 2, 2, 2, -4, 11},
-            {8, 1, 2, -3, -3, 2, 1, 8},
-            {8, 1, 2, -3, -3, 2, 1, 8},
-            {11, -4, 2, 2, 2, 2, -4, 11},
-            {-3, -7, -4, 1, 1, -4, -7, -3},
-            {20, -3, 11, 8, 8, 11, -3, 20}};
+            {27, 4, 18, 15, 15, 18, 4, 20},
+            {4, 0, 3, 1, 1, 3, 0, 4},
+            {18, 3, 2, 2, 2, 2, 3, 18},
+            {15, 1, 2, 4, 4, 2, 1, 15},
+            {15, 1, 2, 4, 4, 2, 1, 15},
+            {18, 3, 2, 2, 2, 2, 3, 18},
+            {4, 0, 3, 1, 1, 3, 0, 4},
+            {20, 4, 18, 15, 15, 18, 4, 20}};
     private ArrayList<int[]> stableDisks = new ArrayList<>();
 
     private byte[][] availablesMoves;
@@ -88,7 +88,8 @@ public class Node {
      * @return La différence de ses propres pions et de celle de l'adversaire
      */
     public int getSelfEvaluation() {
-        if (boardGame.calculEmptyCase() <= 5)
+        // Si l'on s'approche de la fin de partie on ne calcul que la parité car c'est ce qui importe le plus en fin de partie
+        if (boardGame.calculEmptyCase() < 5)
             return 100 * (boardGame.calculPiecePlayer2() - boardGame.calculPiecePlayer1()) / (boardGame.calculPiecePlayer2() + boardGame.calculPiecePlayer1());
 
         // On initialise d'abord la valeur avec la parité sur le plateau
@@ -96,10 +97,8 @@ public class Node {
 
         // On ajoute la valeur de "mobilité"
         value += getMobility();
+        value /= 2;
 
-
-        // On ajoute la valeur des "coins"
-        value += getCornerValue();
         return value;
     }
 
@@ -109,7 +108,7 @@ public class Node {
      * @return la valeur initiale du noeud
      */
     private int getInitialValue() {
-        int initialValue = 0, maxDiskCount = 0, minDiskCount = 0;
+        int initialValue = 0, maxDiskCount = 0, minDiskCount = 0, maxStability = 0, minStability = 0, minMap = 0, maxMap = 0;
         boolean stabilityPossibility = getStabilityPossiblity();
 
         // On parcout le plateau actuel en entier
@@ -121,23 +120,35 @@ public class Node {
 
                     // Si c'est une case adverse on soustrait la valeur de la map
                     if (boardGame.getBoard()[i][j] == (byte) 0) {
-                        initialValue -= vMap[j][i];
+                        minMap += vMap[j][i];
                         minDiskCount++;
                         if (stabilityPossibility)
-                            initialValue -= getDiskStability(i, j);
+                            minStability += getDiskStability(i, j);
                     }
                     // On ajoute dans le cas inverse (si c'est notre pion)
                     else {
-                        initialValue += vMap[j][i];
+                        maxMap += vMap[j][i];
                         maxDiskCount++;
                         if (stabilityPossibility)
-                            initialValue += getDiskStability(i, j);
+                            maxStability += getDiskStability(i, j);
                     }
                 }
 
             }
         }
+
+        // Calcul de la parité
         initialValue += 100 * (maxDiskCount - minDiskCount) / (maxDiskCount + minDiskCount);
+
+        // Ajout de la map value au calcul
+        initialValue += 100 * (maxMap - minMap) / (maxMap + minMap);
+        initialValue /= 2;
+
+        // Ajout de la stabilité si possible
+        if (maxStability != 0 && minStability != 0) {
+            initialValue += 100 * (maxStability - minStability) / (maxStability + minStability);
+            initialValue /= 2;
+        }
         return initialValue;
     }
 
@@ -249,32 +260,6 @@ public class Node {
         else
             mobilityValue = 0;
         return mobilityValue;
-    }
-
-    /**
-     * Fonction permettant de calculer la valeur des coins du plateau
-     *
-     * @return un nombre indiquant la valeur des coins capturés par l'ia
-     */
-    private int getCornerValue() {
-        int cornerValue = 0;
-
-        if (boardGame.getBoard()[0][0] == (byte) 1)
-            cornerValue += 20;
-        else if (boardGame.getBoard()[0][0] == (byte) 0)
-            cornerValue += -20;
-
-        if (boardGame.getBoard()[7][0] == (byte) 1)
-            cornerValue += 20;
-        else if (boardGame.getBoard()[7][0] == (byte) 0)
-            cornerValue += -20;
-
-        if (boardGame.getBoard()[0][7] == (byte) 1)
-            cornerValue += 20;
-        else if (boardGame.getBoard()[0][7] == (byte) 0)
-            cornerValue += -20;
-
-        return cornerValue;
     }
 
     /**
