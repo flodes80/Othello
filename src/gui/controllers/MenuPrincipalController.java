@@ -2,8 +2,8 @@ package gui.controllers;
 
 import gamestuff.Game;
 import gamestuff.Player;
-import gamestuff.ResourceManager;
-import gamestuff.SaveData;
+import gui.misc.ResourceManager;
+import gui.misc.SaveData;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;

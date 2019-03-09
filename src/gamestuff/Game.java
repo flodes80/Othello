@@ -60,17 +60,17 @@ public class Game {
                 // Changement de joueur
                 switchCurrentPlayer();
 
-                // Requête d'affichage des mouvements disponibles
-                gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
-
                 // On fait jouer l'ia
                 if (currentPlayer == player2 && player2.isAi()) {
+                    gameController.removeOldHint();
                     // On indique que l'ia est en train de chercher un coup
                     gameController.getAiIndicator().setVisible(true);
 
-                    AiService aiService = new AiService(colonne, ligne, this, gameController, true);
+                    AiService aiService = new AiService(colonne, ligne, this, gameController, false);
                     aiService.start();
-                }
+                } else
+                    // Requête d'affichage des mouvements disponibles
+                    gameController.showAvailablesMoves(boardGame.getAvailablesMoves(getPlayerValue(currentPlayer)), getPlayerValue(currentPlayer));
             }
 
         }

@@ -25,10 +25,19 @@ public class AiService extends Service<int[]> {
 
         // Méthode appellée lorsque la tâche est finie
         setOnSucceeded(event -> {
+            // Debug
             if (debug) System.out.println("Took " + (endTime - time) + "ms");
+
+            // Obtention résultat
             int[] move = getValue();
+
+            // On cache le progress indicator
             gameController.getAiIndicator().setVisible(false);
+
+            // On joue le coup
             game.play(move[0], move[1]);
+
+            // Debug
             if (debug) System.out.println("Final move: " + move[0] + " " + move[1] + " " + move[2]);
         });
     }
@@ -50,7 +59,10 @@ public class AiService extends Service<int[]> {
             @Override
             protected int[] call() {
                 time = System.currentTimeMillis();
-                int[] move = Ai.move((byte) 0, colonne, ligne, game.getBoardGame());
+
+                // Recherche du coup
+                int[] move = Ai.move((byte) 0, colonne, ligne, game.getBoardGame(), Ai.difficulty.getDepth() > 6);
+
                 endTime = System.currentTimeMillis();
 
                 // Permet de faire un délai de 2 secondes minimum avant que l'ia joue

@@ -2,8 +2,8 @@ package gui.controllers;
 
 import gamestuff.Game;
 import gamestuff.Player;
-import gamestuff.ResourceManager;
-import gamestuff.SaveData;
+import gui.misc.ResourceManager;
+import gui.misc.SaveData;
 import javafx.animation.RotateTransition;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -262,7 +262,7 @@ public class GameController implements Initializable {
         }
     }
 
-    private void removeOldHint() {
+    public void removeOldHint() {
         Iterator<Node> iter = gridPaneGame.getChildren().iterator();
         while (iter.hasNext()) {
             Node node = iter.next();

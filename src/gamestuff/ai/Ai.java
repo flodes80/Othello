@@ -2,6 +2,10 @@ package gamestuff.ai;
 
 import gamestuff.BoardGame;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Ai {
 
     public static Difficulty difficulty;
@@ -15,29 +19,71 @@ public class Ai {
      * @param boardGame   Situation de plateau "actuelle" sur laquelle doit se baser l'algo
      * @return Un tableau de trois entiers comprenant en 1ère position la colonne à jouer, en 2ème la ligne à jouer et en 3ème le score attribué à ce "move" par l'ia
      */
-    public static int[] move(byte valueToPlay, int col, int row, BoardGame boardGame) {
+    public static int[] move(byte valueToPlay, int col, int row, BoardGame boardGame, boolean multithreaded) {
         int[] bestMove = new int[3];
         bestMove[2] = Integer.MIN_VALUE;  // On cherche à maximiser les gains de l'ordinateur donc on initialise le score à -INFINI
 
         // Noeud de départ qui correspond à la situation actuelle du jeu lors de la demande de coup pour l'ordinateur
         Node nodeRoot = new Node(valueToPlay, col, row, boardGame);
 
-        // On parcours coups possibles pour l'ordinateur
-        for (Node child : nodeRoot.getChildrensNodes()) {
-            // On attribue un score à ces coups
-            int alpha = mtd(child, difficulty.getDepth() - 1, bestMove[2]); // MTD
+        if (multithreaded) {
+            // Création d'une liste "Thread Safe"
+            List<int[]> availablesMoves = Collections.synchronizedList(new ArrayList<>());
 
-            // Si le coup possède un meilleur score que précédemment on le choisi
-            if (alpha > bestMove[2]) {
-                // On remplie le tableau du bestMove
-                bestMove[0] = child.getCol();   // Colonne à jouer
-                bestMove[1] = child.getRow();   // Ligne à jouer
-                bestMove[2] = alpha;            // Score du move
+            // Création d'un tableau de thread pour paralléliser le calcul
+            Thread[] threadArray = new Thread[nodeRoot.getChildrensNodes().size()];
+            int index = 0;
+            for (Node child : nodeRoot.getChildrensNodes()) {
+                // Création d'un thread pour chaque coups possibles
+                Thread thread = new Thread(new ThreadedAiTask(availablesMoves, child, difficulty.getDepth() - 1));
+
+                // Lancement du thread
+                thread.start();
+
+                // Ajout du thread dans le tableau de thread
+                threadArray[index] = thread;
+
+                index++;
+            }
+
+            // On attend que tous les threads soient terminés
+            for (Thread thread : threadArray) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // On cherche le meilleur move parmis les moves retournés par les différents threads
+            for (int[] move : availablesMoves) {
+                if (move[2] > bestMove[2]) {
+                    // On remplie le tableau du bestMove
+                    bestMove[0] = move[0];   // Colonne à jouer
+                    bestMove[1] = move[1];   // Ligne à jouer
+                    bestMove[2] = move[2];   // Score du move
+                }
+            }
+        } else {
+            // On parcours coups possibles pour l'ordinateur
+            for (Node child : nodeRoot.getChildrensNodes()) {
+                // On attribue un score à ces coups
+                int alpha = mtd(child, difficulty.getDepth() - 1, Integer.MIN_VALUE); // MTD
+
+                // Si le coup possède un meilleur score que précédemment on le choisi
+                if (alpha > bestMove[2]) {
+                    // On remplie le tableau du bestMove
+                    bestMove[0] = child.getCol();   // Colonne à jouer
+                    bestMove[1] = child.getRow();   // Ligne à jouer
+                    bestMove[2] = alpha;            // Score du move
+                }
             }
         }
+
         // Pour finir on retourne le meilleur coup
         return bestMove;
     }
+
 
     /**
      * Algorithme MTD basé sur Alpha Beta
@@ -47,7 +93,7 @@ public class Ai {
      * @param init_g borne actuelle
      * @return La valeur du noeud testé
      */
-    private static int mtd(Node node, int depth, int init_g) {
+    public static int mtd(Node node, int depth, int init_g) {
         int g = init_g;
         int haut = Integer.MAX_VALUE;
         int bas = Integer.MIN_VALUE;
@@ -75,7 +121,7 @@ public class Ai {
      * @param beta  Borne supérieure
      * @return La valeur du noeud testé
      */
-    private static int alphaBeta(Node node, int depth, int alpha, int beta) {
+    public static int alphaBeta(Node node, int depth, int alpha, int beta) {
         int m;
         // Si le noeud est une feuille ou que la profondeur maximale est atteinte on retourne une évaluation de la situation
         if (node.isALeaf() || depth == 0) {
@@ -133,4 +179,5 @@ public class Ai {
         }
         return m;
     }
+
 }

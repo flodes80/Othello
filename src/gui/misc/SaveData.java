@@ -1,4 +1,4 @@
-package gamestuff;
+package gui.misc;
 
 import java.io.Serializable;
 
