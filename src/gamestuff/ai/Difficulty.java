@@ -7,7 +7,7 @@ public enum Difficulty {
 
     FACILE(2),
     NORMAL(4),
-    DIFFICILE(8);
+    DIFFICILE(6);
 
     private final int depth;
 

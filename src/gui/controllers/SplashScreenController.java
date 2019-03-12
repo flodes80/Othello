@@ -18,8 +18,6 @@ import java.util.logging.Logger;
 
 public class SplashScreenController implements Initializable{
 
-    private double xOffset = 0;
-    private double yOffset = 0;
     AnimationGenerator animationGenerator = null;
     @FXML
     private AnchorPane parent;
@@ -37,8 +35,8 @@ public class SplashScreenController implements Initializable{
             Parent fxml = loader.load();
             menuPrincipalController = loader.getController();
             animationGenerator = new AnimationGenerator();
-            animationGenerator.applyFadeAnimationOn02(parent, 500, 0.2, 1, 1, (e2) -> {
-            animationGenerator.applyFadeAnimationOn01(parent, 500, 1, 1, 1, (e) -> {
+            animationGenerator.applyFadeAnimationOn02(parent, 1000, 0.2, 1, 1, (e2) -> {
+                animationGenerator.applyFadeAnimationOn01(parent, 1000, 1, 1, 1, (e) -> {
                     parent.getChildren().removeAll();
                     parent.getChildren().setAll(fxml);
                 });

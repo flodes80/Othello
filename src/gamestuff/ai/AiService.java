@@ -61,7 +61,7 @@ public class AiService extends Service<int[]> {
                 time = System.currentTimeMillis();
 
                 // Recherche du coup
-                int[] move = Ai.move((byte) 0, colonne, ligne, game.getBoardGame(), Ai.difficulty.getDepth() > 6);
+                int[] move = Ai.move((byte) 0, colonne, ligne, game.getBoardGame(), true);
 
                 endTime = System.currentTimeMillis();
 

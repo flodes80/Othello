@@ -1,6 +1,7 @@
 package gamestuff.ai;
 
 import gamestuff.BoardGame;
+import gamestuff.Direction;
 
 import java.util.ArrayList;
 
@@ -9,15 +10,15 @@ import java.util.ArrayList;
  */
 public class Node {
 
-    private final static int[][] vMap = {
-            {27, 4, 18, 15, 15, 18, 4, 20},
-            {4, 0, 3, 1, 1, 3, 0, 4},
-            {18, 3, 2, 2, 2, 2, 3, 18},
-            {15, 1, 2, 4, 4, 2, 1, 15},
-            {15, 1, 2, 4, 4, 2, 1, 15},
-            {18, 3, 2, 2, 2, 2, 3, 18},
-            {4, 0, 3, 1, 1, 3, 0, 4},
-            {20, 4, 18, 15, 15, 18, 4, 20}};
+    private final static int[][] pMap = {
+            {100, -10, 8, 6, 6, 8, -10, 100},
+            {-10, -25, -4, -4, -4, -4, -25, -10},
+            {8, -4, 6, 4, 4, 6, -4, 8},
+            {6, -4, 4, 0, 0, 4, -4, 6},
+            {6, -4, 4, 0, 0, 4, -4, 6},
+            {8, -4, 6, 4, 4, 6, -4, 8},
+            {-10, -25, -4, -4, -4, -4, -25, -10},
+            {100, -10, 8, 6, 6, 8, -10, 100}};
     private ArrayList<int[]> stableDisks = new ArrayList<>();
 
     private byte[][] availablesMoves;
@@ -51,7 +52,7 @@ public class Node {
         availablesMoves = this.boardGame.getAvailablesMoves(ennemyValue);
 
         // Permet de remplir la liste des pions étants stables
-        computeAllStablesDisks();
+        if (isStabilityPossiblity()) computeAllStablesDisks();
     }
 
     /**
@@ -88,70 +89,153 @@ public class Node {
      * @return La différence de ses propres pions et de celle de l'adversaire
      */
     public int getSelfEvaluation() {
-        // Si l'on s'approche de la fin de partie on ne calcul que la parité car c'est ce qui importe le plus en fin de partie
-        if (boardGame.calculEmptyCase() < 5)
-            return 100 * (boardGame.calculPiecePlayer2() - boardGame.calculPiecePlayer1()) / (boardGame.calculPiecePlayer2() + boardGame.calculPiecePlayer1());
+        // Etat terminal
+        if (isALeaf()) {
+            return 1000 * evalDiscDiff();
+        }
 
-        // On initialise d'abord la valeur avec la parité sur le plateau
-        int value = getInitialValue();
-
-        // On ajoute la valeur de "mobilité"
-        value += getMobility();
-        value /= 2;
-
-        return value;
+        // En cours de jeu evaluation différentes
+        switch (GamePhase.getGamePhase(boardGame)) {
+            case EARLY_GAME:
+                return 100 * evalCorner() + 75 * evalStability() + 50 * evalMobility() + 50 * evalFrontier() + evalPlacement();
+            case MID_GAME:
+                return 100 * evalCorner() + 75 * evalStability() + 50 * evalFrontier() + 35 * evalDiscDiff() + evalPlacement();
+            case LATE_GAME:
+                return 100 * evalCorner() + 75 * evalStability() + 100 * evalDiscDiff() + evalPlacement();
+            default:
+                return 0;
+        }
     }
 
     /**
-     * Fonction déterminant la valeur intiale à partir de la parité, de la map value ainsi que de la stabilité
+     * Evalue la parité entre les deux joueurs
      *
-     * @return la valeur initiale du noeud
+     * @return une valeur entre -100 et 100.
      */
-    private int getInitialValue() {
-        int initialValue = 0, maxDiskCount = 0, minDiskCount = 0, maxStability = 0, minStability = 0, minMap = 0, maxMap = 0;
-        boolean stabilityPossibility = getStabilityPossiblity();
+    private int evalDiscDiff() {
+        int min = boardGame.calculPiecePlayer1();
+        int max = boardGame.calculPiecePlayer2();
 
-        // On parcout le plateau actuel en entier
+        return 100 * (max - min) / (max + min);
+    }
+
+    private int evalPlacement() {
+        int min = 0;
+        int max = 0;
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (boardGame.getBoard()[i][j] == (byte) 0)
+                    min += pMap[j][i];
+                else if (boardGame.getBoard()[i][j] == (byte) 1)
+                    max += pMap[j][i];
+            }
+        }
+        return max - min;
+    }
+
+    /**
+     * Fonction permettant de calculer la mobilité d'une situaiton
+     *
+     * @return un nombre entre -100 et 100 jugeant la possiblité de mouvement de l'ia
+     */
+    private int evalMobility() {
+        int max = boardGame.getAvailablesMovesAmount((byte) 1);
+        int min = boardGame.getAvailablesMovesAmount((byte) 0);
+
+        if (max + min == 0) return 0;
+        return 100 * (max - min) / (max + min);
+    }
+
+    /**
+     * Fonction permettant de calculer les coins capturés
+     *
+     * @return un nombre entre -100 et 100 portant sur les coins capturés.
+     */
+    private int evalCorner() {
+        int max = 0;
+        int min = 0;
+
+        if (boardGame.getBoard()[0][0] == (byte) 1) max++;
+        else if (boardGame.getBoard()[0][0] == (byte) 0) min++;
+
+        if (boardGame.getBoard()[7][0] == (byte) 1) max++;
+        else if (boardGame.getBoard()[7][0] == (byte) 0) min++;
+
+        if (boardGame.getBoard()[0][7] == (byte) 1) max++;
+        else if (boardGame.getBoard()[0][7] == (byte) 0) min++;
+
+        if (boardGame.getBoard()[7][7] == (byte) 1) max++;
+        else if (boardGame.getBoard()[7][7] == (byte) 0) min++;
+
+        if (max + min == 0) return 0;
+        return 100 * (max - min) / (max + min);
+    }
+
+    /**
+     * Fonction permettant de retourner le nombre de pions étant à la frontière de pions vides
+     *
+     * @return un nombre entre -100 et 100 portant sur les pions étant possiblements capturables
+     */
+    private int evalFrontier() {
+        ArrayList<int[]> maxFrontierSquare = new ArrayList<>();
+        ArrayList<int[]> minFrontierSquare = new ArrayList<>();
+
         for (int i = 0; i < boardGame.getBoard().length; i++) {
             for (int j = 0; j < boardGame.getBoard().length; j++) {
 
-                // Si ce n'est pas une case vide
                 if (boardGame.getBoard()[i][j] != (byte) -1) {
 
-                    // Si c'est une case adverse on soustrait la valeur de la map
-                    if (boardGame.getBoard()[i][j] == (byte) 0) {
-                        minMap += vMap[j][i];
-                        minDiskCount++;
-                        if (stabilityPossibility)
-                            minStability += getDiskStability(i, j);
-                    }
-                    // On ajoute dans le cas inverse (si c'est notre pion)
-                    else {
-                        maxMap += vMap[j][i];
-                        maxDiskCount++;
-                        if (stabilityPossibility)
-                            maxStability += getDiskStability(i, j);
-                    }
-                }
+                    // On commence les checks dans toutes les directions
+                    for (Direction direction : Direction.values())
 
+                        // On vérifie si on est pas "hors map"
+                        if (i + direction.getColstep() > 0 && i + direction.getColstep() < 8 && j + direction.getRowstep() > 0 && j + direction.getRowstep() < 8) {
+
+                            boolean redundant = false;
+                            // On check la nature du pion et si il est déjà présent dans la liste ou non
+                            if (boardGame.getBoard()[i][j] == (byte) 0) {
+                                for (int[] square : maxFrontierSquare) {
+                                    if (square[0] == i + direction.getColstep() && square[1] == j + direction.getRowstep()) {
+                                        redundant = true;
+                                        break;
+                                    }
+                                }
+                                if (!redundant)
+                                    maxFrontierSquare.add(new int[]{i + direction.getColstep(), j + direction.getRowstep()});
+                            } else {
+                                for (int[] square : minFrontierSquare) {
+                                    if (square[0] == i + direction.getColstep() && square[1] == j + direction.getRowstep()) {
+                                        redundant = true;
+                                        break;
+                                    }
+                                }
+                                if (!redundant)
+                                    minFrontierSquare.add(new int[]{i + direction.getColstep(), j + direction.getRowstep()});
+                            }
+
+                        }
+
+                }
             }
         }
-
-        // Calcul de la parité
-        initialValue += 100 * (maxDiskCount - minDiskCount) / (maxDiskCount + minDiskCount);
-
-        // Ajout de la map value au calcul
-        initialValue += 100 * (maxMap - minMap) / (maxMap + minMap);
-        initialValue /= 2;
-
-        // Ajout de la stabilité si possible
-        if (maxStability != 0 && minStability != 0) {
-            initialValue += 100 * (maxStability - minStability) / (maxStability + minStability);
-            initialValue /= 2;
-        }
-        return initialValue;
+        if (maxFrontierSquare.size() + minFrontierSquare.size() == 0) return 0;
+        return 100 * (maxFrontierSquare.size() - minFrontierSquare.size()) / (maxFrontierSquare.size() + minFrontierSquare.size() + 1);
     }
 
+    private int evalStability() {
+        int max = 0;
+        int min = 0;
+        for (int[] stableDisk : stableDisks) {
+            if (boardGame.getBoard()[stableDisk[0]][stableDisk[1]] == (byte) 0)
+                min++;
+            else if (boardGame.getBoard()[stableDisk[0]][stableDisk[1]] == (byte) 1)
+                max++;
+        }
+
+        if (max + min == 0) return 0;
+        return 100 * (max - min) / (max + min);
+    }
 
     /**
      * Fonction permettant de rechercher tous les pions stables sur le plateau
@@ -219,7 +303,7 @@ public class Node {
      *
      * @return true si il y a une possibilité false sinon
      */
-    private boolean getStabilityPossiblity() {
+    private boolean isStabilityPossiblity() {
         if (boardGame.getBoard()[0][0] != (byte) -1 || boardGame.getBoard()[1][0] != (byte) -1 || boardGame.getBoard()[0][1] != (byte) -1)
             return true;
         if (boardGame.getBoard()[7][0] != (byte) -1 || boardGame.getBoard()[7][1] != (byte) -1 || boardGame.getBoard()[6][0] != (byte) -1)
@@ -227,39 +311,6 @@ public class Node {
         if (boardGame.getBoard()[0][7] != (byte) -1 || boardGame.getBoard()[1][7] != (byte) -1 || boardGame.getBoard()[0][6] != (byte) -1)
             return true;
         return boardGame.getBoard()[7][7] != (byte) -1 || boardGame.getBoard()[7][6] != (byte) -1 || boardGame.getBoard()[6][7] != (byte) -1;
-    }
-
-    /**
-     * Fonction retournant la stabilité d'un pion
-     *
-     * @param col colonne du pion à tester
-     * @param row ligne du pion à tester
-     * @return 0 si le pion est instable et 2 si il est stable
-     */
-    private int getDiskStability(int col, int row) {
-        for (int[] stableDisk : stableDisks) {
-            if (stableDisk[0] == col && stableDisk[1] == row)
-                return 2;
-        }
-
-        return 0;
-    }
-
-    /**
-     * Fonction permettant de calculer la mobilité d'une situaiton
-     *
-     * @return un nombre entre -100 et 100 jugeant la possiblité de mouvement de l'ia
-     */
-    private int getMobility() {
-        int mobilityValue;
-        int maxMoves = boardGame.getAvailablesMovesAmount((byte) 1);
-        int minMoves = boardGame.getAvailablesMovesAmount((byte) 0);
-
-        if (maxMoves + minMoves != 0)
-            mobilityValue = 100 * (maxMoves - minMoves) / (maxMoves + minMoves);
-        else
-            mobilityValue = 0;
-        return mobilityValue;
     }
 
     /**
