@@ -105,11 +105,13 @@ public class GameController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/gui/interfaces/Rules.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
+            Scene scene = new Scene(fxmlLoader.load(), 780, 580);
             Stage stage = new Stage();
             stage.setTitle("Othello : Règles");
             stage.getIcons().add(new Image("img/icon.png"));
             stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setAlwaysOnTop(true);
             stage.show();
         } catch (IOException e) {
             System.out.println("erreur");
@@ -158,13 +160,15 @@ public class GameController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/gui/interfaces/Exit.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
+            Scene scene = new Scene(fxmlLoader.load(), 590, 360);
             ExitController exitController = fxmlLoader.getController();
             exitController.setMainController(mainController);
             exitStage = new Stage();
             exitStage.setTitle("Othello : Quitter ?");
             exitStage.getIcons().add(new Image("img/icon.png"));
             exitStage.setScene(scene);
+            exitStage.setResizable(false);
+            exitStage.setAlwaysOnTop(true);
             exitController.setExitStage(exitStage);
             exitStage.show();
         } catch (IOException e) {

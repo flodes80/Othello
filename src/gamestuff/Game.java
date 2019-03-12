@@ -66,7 +66,7 @@ public class Game {
                     // On indique que l'ia est en train de chercher un coup
                     gameController.getAiIndicator().setVisible(true);
 
-                    AiService aiService = new AiService(colonne, ligne, this, gameController, true);
+                    AiService aiService = new AiService(colonne, ligne, this, gameController, false);
                     aiService.start();
                 } else
                     // Requête d'affichage des mouvements disponibles
