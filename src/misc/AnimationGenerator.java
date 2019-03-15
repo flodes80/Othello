@@ -1,4 +1,4 @@
-package gui.misc;
+package misc;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;

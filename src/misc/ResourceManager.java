@@ -1,4 +1,4 @@
-package gui.misc;
+package misc;
 
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -69,8 +69,8 @@ public class ResourceManager {
         String joueur_1 = joueurs.get(0).getAttribute("joueur_1").getValue();
         String joueur_2 = joueurs.get(0).getAttribute("joueur_2").getValue();
         String currentPlayer = joueurs.get(0).getChildText("currentPlayer");
-        List<Element> e_isAI = racine.getChildren("isAI");
-        Boolean isAI = Boolean.valueOf(e_isAI.get(0).getContent().toString());
+        String isAi = racine.getChildText("isAI");
+        boolean isAI = Boolean.valueOf(isAi);
 
         byte[][] board = new byte[8][8];
         for (int i = 0; i < 8; i++) {

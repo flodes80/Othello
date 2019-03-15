@@ -2,8 +2,6 @@ package gui.controllers;
 
 import gamestuff.Game;
 import gamestuff.Player;
-import gui.misc.ResourceManager;
-import gui.misc.SaveData;
 import javafx.animation.RotateTransition;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -31,6 +29,8 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import misc.ResourceManager;
+import misc.SaveData;
 
 import java.io.File;
 import java.io.IOException;

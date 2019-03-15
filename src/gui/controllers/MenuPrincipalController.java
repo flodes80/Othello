@@ -2,8 +2,6 @@ package gui.controllers;
 
 import gamestuff.Game;
 import gamestuff.Player;
-import gui.misc.ResourceManager;
-import gui.misc.SaveData;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -11,6 +9,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import misc.ResourceManager;
+import misc.SaveData;
 
 import java.io.File;
 import java.io.IOException;

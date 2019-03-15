@@ -1,4 +1,4 @@
-package gui.misc;
+package misc;
 
 import java.io.Serializable;
 
