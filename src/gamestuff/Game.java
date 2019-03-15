@@ -98,7 +98,14 @@ public class Game {
         }
         else if (boardGame.calculPiecePlayer1() < boardGame.calculPiecePlayer2()) {
             winner = player2.getName();
-        } else
+        }
+        else if (boardGame.calculPiecePlayer1() == 0 ){
+            winner = player2.getName();
+        }
+        else if (boardGame.calculPiecePlayer2() == 0 ){
+            winner = player1.getName();
+        }
+        else
             winner = "Egalité";
 
         // Requête d'affichage du vainqueur

@@ -44,7 +44,7 @@ public class GameController implements Initializable {
     Label labelJoueur1, labelJoueur2, labelWinnerName, labelScoreJ1, labelScoreJ2;
 
     @FXML
-    ImageView imageGameOver;
+    ImageView imageGameOver, imageGameOverDraw;
 
     @FXML
     GridPane gridPaneGame;
@@ -243,7 +243,10 @@ public class GameController implements Initializable {
     }
 
     public void showWinFrame(String winner) {
-        imageGameOver.setVisible(true);
+        if (!winner.equals("Egalité"))
+            imageGameOver.setVisible(true);
+        else
+            imageGameOverDraw.setVisible(true);
         labelWinnerName.setText(winner);
         labelWinnerName.setVisible(true);
         labelWinnerName.setAlignment(Pos.CENTER);

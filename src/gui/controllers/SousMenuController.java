@@ -64,8 +64,13 @@ public class SousMenuController implements Initializable{
 
     @FXML
     private void handleButtonValidateJvsJAction() {
-        if ((textFieldJ1.getText().equals("") || textFieldJ2.getText().equals(""))) {
+        if ((textFieldJ1.getText().isEmpty() || textFieldJ2.getText().isEmpty())) {
             labelErrorMessage.setText("Veuillez remplir tous les champs");
+            labelErrorMessage.setAlignment(Pos.CENTER);
+            labelErrorMessage.setVisible(true);
+        }
+        else if ((textFieldJ1.getText().equals("Egalité") || textFieldJ2.getText().equals("Egalité"))) {
+            labelErrorMessage.setText("Veuillez choisir un autre nom");
             labelErrorMessage.setAlignment(Pos.CENTER);
             labelErrorMessage.setVisible(true);
         }
@@ -88,10 +93,32 @@ public class SousMenuController implements Initializable{
 
     @FXML
     private void handleButtonValidateJvsIAAction() {
-        mainController.launchGame(new Game(
-                new Player(textFieldJ1.getText(), Color.WHITE, false),
-                new Player("Ordinateur", Color.BLACK, true)));
-        Ai.difficulty = Difficulty.getDifficulty((int) sliderIA.getValue());
+        if ((textFieldJ1.getText().isEmpty())) {
+            labelErrorMessage.setText("Veuillez remplir tous les champs");
+            labelErrorMessage.setAlignment(Pos.CENTER);
+            labelErrorMessage.setVisible(true);
+        }
+        else if ((textFieldJ1.getText().equals("Egalité"))) {
+            labelErrorMessage.setText("Veuillez choisir un autre nom");
+            labelErrorMessage.setAlignment(Pos.CENTER);
+            labelErrorMessage.setVisible(true);
+        }
+        else if (textFieldJ1.getText().equals("Ordinateur")){
+            labelErrorMessage.setText("Veuillez choisir un autre nom");
+            labelErrorMessage.setAlignment(Pos.CENTER);
+            labelErrorMessage.setVisible(true);
+        }
+        else if (textFieldJ1.getText().length() > 15){
+            labelErrorMessage.setText("Veuillez inscrire des noms de moins de 15 caractères");
+            labelErrorMessage.setAlignment(Pos.CENTER);
+            labelErrorMessage.setVisible(true);
+        }
+        else {
+            mainController.launchGame(new Game(
+                    new Player(textFieldJ1.getText(), Color.WHITE, false),
+                    new Player("Ordinateur", Color.BLACK, true)));
+            Ai.difficulty = Difficulty.getDifficulty((int) sliderIA.getValue());
+        }
     }
 
     private void backToMainMenu(AnchorPane p_anchorPane) throws IOException {
