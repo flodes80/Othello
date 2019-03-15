@@ -78,12 +78,12 @@
     <ImageView fx:id="imageGameOver" fitHeight="520.0" fitWidth="869.0" layoutX="207.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true" translateZ="-50.0" visible="false">
         <Image url="@../../img/overlay_winner.png" />
     </ImageView>
-   <ImageView fx:id="imageGameOverDraw" fitHeight="520.0" fitWidth="869.0" layoutX="217.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true" visible="false">
+   <ImageView fx:id="imageGameOverDraw" fitHeight="520.0" fitWidth="869.0" layoutX="217.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true" translateZ="-50.0" visible="false">
       <image>
          <Image url="@../../img/overlay_draw.png" />
       </image>
    </ImageView>
-    <Label fx:id="labelWinnerName" layoutX="358.0" layoutY="161.0" prefHeight="106.0" prefWidth="563.0" text="Winner" textAlignment="CENTER" translateZ="-50.0" visible="false">
+    <Label fx:id="labelWinnerName" layoutX="358.0" layoutY="161.0" prefHeight="106.0" prefWidth="563.0" text="Winner" textAlignment="CENTER" textFill="RED" translateZ="-50.0" visible="false">
         <font>
             <Font name="Bodoni MT" size="105.0" />
         </font>
