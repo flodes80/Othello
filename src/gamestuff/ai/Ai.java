@@ -57,6 +57,7 @@ public class Ai {
 
             // On cherche le meilleur move parmis les moves retournés par les différents threads
             for (int[] move : availablesMoves) {
+                //System.out.println("Possible move: " + move[0] + " " + move[1] + " " + move[2]);
                 if (move[2] > bestMove[2]) {
                     // On remplie le tableau du bestMove
                     bestMove[0] = move[0];   // Colonne à jouer
@@ -122,10 +123,14 @@ public class Ai {
      * @return La valeur du noeud testé
      */
     public static int alphaBeta(Node node, int depth, int alpha, int beta) {
-        int m;
+        int score;
         // Si le noeud est une feuille ou que la profondeur maximale est atteinte on retourne une évaluation de la situation
         if (node.isALeaf() || depth == 0) {
             return node.getSelfEvaluation();
+        }
+
+        if (!node.hasAnyMoves()) {
+            return alphaBeta(node, depth - 1, alpha, beta);
         }
 
         // Sinon on applique l'algorithme alpha beta
@@ -134,22 +139,20 @@ public class Ai {
             // Si c'est un noeud max
             if (node.isMaxNode()) {
                 // Noeud max donc on cherche à maximiser la valeur du noeud
-                m = Integer.MIN_VALUE;
+                score = Integer.MIN_VALUE;
 
                 // On parcourt les enfants de ce noeud
                 for (Node children : node.getChildrensNodes()) {
+                    // Obtention valeurs des noeuds enfants
+                    int childScore = alphaBeta(children, depth - 1, alpha, beta);
+                    // Meilleur score ?
+                    if (childScore > score) score = childScore;
 
-                    // Nous sommes dans un noeud max donc nous cherchons la plus haute valeur dans ses noeuds fils
-                    m = Integer.max(m, alphaBeta(children, depth - 1, alpha, beta));
+                    // Mise à jour d'alpha si nécessaire
+                    if (score > alpha) alpha = score;
 
-                    // La valeur trouvée pour un fils est supérieure au beta que le noeud parent à transmis ici
-                    // On arrête la recherche ici car le noeud parent cherche à minimiser, et l'on vient de trouver une valeur supérieure
-                    if (beta <= m) {
-                        return m;
-                    }
-
-                    // Pas de coupure, donc on cherche à obtenir la valeur la plus haute entre alpha et la valeur actuelle
-                    alpha = Integer.max(alpha, m);
+                    // Coupure beta ?
+                    if (beta <= alpha) break;
                 }
 
             }
@@ -157,27 +160,25 @@ public class Ai {
             // Sinon c'est un noeud min
             else {
                 // Noeud min donc on cherche à minimiser la valeur du noeud
-                m = Integer.MAX_VALUE;
+                score = Integer.MAX_VALUE;
 
                 // On parcourt les enfants de ce noeud
                 for (Node children : node.getChildrensNodes()) {
+                    // Obtention valeurs des noeuds enfants
+                    int childScore = alphaBeta(children, depth - 1, alpha, beta);
+                    // Meilleur score ?
+                    if (childScore < score) score = childScore;
 
-                    // Nous sommes dans un noeud min donc nous cherchons la plus petite valeur dans ses noeuds fils
-                    m = Integer.min(m, alphaBeta(children, depth - 1, alpha, beta));
+                    // Mise à jour d'alpha si nécessaire
+                    if (score < beta) beta = score;
 
-                    // La valeur trouvée pour un fils est inférieure au alpha que le noeud parent à transmis ici
-                    // On arrête la recherche ici car le noeud parent cherche à maximiser, et l'on vient de trouver une valeur inférieure
-                    if (alpha >= m) {
-                        return m;
-                    }
-
-                    // Pas de coupure, donc on cherche à obtenir la valeur la plus petite entre beta et la valeur actuelle
-                    beta = Integer.min(beta, m);
+                    // Coupure beta ?
+                    if (beta <= alpha) break;
                 }
 
             }
         }
-        return m;
+        return score;
     }
 
 }

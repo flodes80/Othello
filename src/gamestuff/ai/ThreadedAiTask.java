@@ -22,7 +22,7 @@ public class ThreadedAiTask extends Task<Void> {
 
     @Override
     protected Void call() {
-        int value = Ai.mtd(child, depth, Integer.MIN_VALUE);
+        int value = Ai.alphaBeta(child, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
         int[] move = {child.getCol(), child.getRow(), value};
         availablesMoves.add(move);
         return null;

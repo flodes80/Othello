@@ -338,7 +338,11 @@ public class Node {
      * @return vrai si c'est un noeud max et faux si c'en est pas un
      */
     public boolean isMaxNode() {
-        return valueToPlay == 1;
+        return valueToPlay == 0;
+    }
+
+    public boolean hasAnyMoves() {
+        return availablesMoves.length > 0;
     }
 
     /**
