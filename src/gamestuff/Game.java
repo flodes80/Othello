@@ -78,12 +78,12 @@ public class Game {
     }
 
     /**
-     * Détection de fin de partie si il ne reste plus de cases vides
+     * Détection de fin de partie si il ne reste plus de cases vides, ou si un joueur n'a plus de pions ou si aucun joueur ne peut jouer
      *
      * @return Vrai si la partie est finie
      */
     private boolean isGameOver() {
-        return boardGame.calculEmptyCase() == 0;
+        return boardGame.calculEmptyCase() == 0 || boardGame.calculPiecePlayer1() == 0 || boardGame.calculPiecePlayer2() == 0 || boardGame.getAvailablesMovesAmount((byte) 0) == 0 && boardGame.getAvailablesMovesAmount((byte) 1) == 0;
     }
 
     /**

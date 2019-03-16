@@ -101,7 +101,7 @@ public class BoardGame {
                 if (col > 7 || row > 7 || col < 0 || row < 0 || currentValue == -1)
                     break;
                 currentValue = board[col][row];
-                if (currentValue == getEnnemyValue(value) && !flag1)
+                if (currentValue == getEnnemyValue(value) && !flag1 && Math.abs(colonne - col) <= 1 && Math.abs(ligne - row) <= 1)
                     flag1 = true;
                 if (flag1 && currentValue == value)
                     flag2 = true;
