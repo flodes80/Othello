@@ -24,7 +24,15 @@ public class Ai {
         bestMove[2] = Integer.MIN_VALUE;  // On cherche à maximiser les gains de l'ordinateur donc on initialise le score à -INFINI
 
         // Noeud de départ qui correspond à la situation actuelle du jeu lors de la demande de coup pour l'ordinateur
-        Node nodeRoot = new Node(valueToPlay, col, row, boardGame);
+        Node nodeRoot;
+
+        // Chargement de partie
+        if (col == -99) {
+            int[] location = boardGame.getFirstPiece((byte) 0);
+            col = location[0];
+            row = location[1];
+        }
+        nodeRoot = new Node(valueToPlay, col, row, boardGame);
 
         if (multithreaded) {
             // Création d'une liste "Thread Safe"
@@ -129,6 +137,7 @@ public class Ai {
             return node.getSelfEvaluation();
         }
 
+        // Si pas de coups à jouer alors on descend d'un cran vers le noeud adverse
         if (!node.hasAnyMoves()) {
             return alphaBeta(node, depth - 1, alpha, beta);
         }
@@ -172,7 +181,7 @@ public class Ai {
                     // Mise à jour d'alpha si nécessaire
                     if (score < beta) beta = score;
 
-                    // Coupure beta ?
+                    // Coupure alpha ?
                     if (beta <= alpha) break;
                 }
 

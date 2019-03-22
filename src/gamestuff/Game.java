@@ -2,7 +2,6 @@ package gamestuff;
 
 import gamestuff.ai.AiService;
 import gui.controllers.GameController;
-import javafx.scene.paint.Color;
 
 public class Game {
 
@@ -36,7 +35,7 @@ public class Game {
         boolean placed;
 
         // Détection du joueur qui joue en fonction de sa couleur
-        if(currentPlayer.getColor() == Color.WHITE)
+        if (currentPlayer == player1)
             placed = boardGame.add((byte) 0, colonne, ligne);
         else
             placed = boardGame.add((byte) 1, colonne, ligne);
@@ -66,7 +65,7 @@ public class Game {
                     // On indique que l'ia est en train de chercher un coup
                     gameController.getAiIndicator().setVisible(true);
 
-                    AiService aiService = new AiService(colonne, ligne, this, gameController, true);
+                    AiService aiService = new AiService(colonne, ligne, this, gameController, false);
                     aiService.start();
                 } else
                     // Requête d'affichage des mouvements disponibles

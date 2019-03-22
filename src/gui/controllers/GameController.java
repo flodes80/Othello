@@ -145,13 +145,13 @@ public class GameController implements Initializable {
         mainController.getGameStage().close();
         if (mainController.getGame().getPlayer2().isAi()) {
             mainController.launchGame(new Game(
-                    new Player(labelJoueur1.getText(), Color.WHITE, false),
-                    new Player(labelJoueur2.getText(), Color.BLACK, true))
+                    new Player(labelJoueur1.getText(), false),
+                    new Player(labelJoueur2.getText(), true))
             );
         } else {
             mainController.launchGame(new Game(
-                    new Player(labelJoueur1.getText(), Color.WHITE, false),
-                    new Player(labelJoueur2.getText(), Color.BLACK, false)));
+                    new Player(labelJoueur1.getText(), false),
+                    new Player(labelJoueur2.getText(), false)));
         }
     }
 

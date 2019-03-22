@@ -14,7 +14,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -78,16 +77,15 @@ public class SousMenuController implements Initializable{
             labelErrorMessage.setText("Veuillez choisir des noms différents");
             labelErrorMessage.setAlignment(Pos.CENTER);
             labelErrorMessage.setVisible(true);
-        }
-        else if (textFieldJ1.getText().length() > 15 || textFieldJ2.getText().length() > 15){
-            labelErrorMessage.setText("Veuillez inscrire des noms de moins de 15 caractères");
+        } else if (textFieldJ1.getText().length() > 13 || textFieldJ2.getText().length() > 13) {
+            labelErrorMessage.setText("Veuillez inscrire des noms de moins de 13 caractères");
             labelErrorMessage.setAlignment(Pos.CENTER);
             labelErrorMessage.setVisible(true);
         }
         else {
             mainController.launchGame(new Game(
-                    new Player(textFieldJ1.getText(), Color.WHITE, false),
-                    new Player(textFieldJ2.getText(), Color.BLACK, false)));
+                    new Player(textFieldJ1.getText(), false),
+                    new Player(textFieldJ2.getText(), false)));
         }
     }
 
@@ -107,16 +105,15 @@ public class SousMenuController implements Initializable{
             labelErrorMessage.setText("Veuillez choisir un autre nom");
             labelErrorMessage.setAlignment(Pos.CENTER);
             labelErrorMessage.setVisible(true);
-        }
-        else if (textFieldJ1.getText().length() > 15){
-            labelErrorMessage.setText("Veuillez inscrire des noms de moins de 15 caractères");
+        } else if (textFieldJ1.getText().length() > 13) {
+            labelErrorMessage.setText("Veuillez inscrire des noms de moins de 13 caractères");
             labelErrorMessage.setAlignment(Pos.CENTER);
             labelErrorMessage.setVisible(true);
         }
         else {
             mainController.launchGame(new Game(
-                    new Player(textFieldJ1.getText(), Color.WHITE, false),
-                    new Player("Ordinateur", Color.BLACK, true)));
+                    new Player(textFieldJ1.getText(), false),
+                    new Player("Ordinateur", true)));
             Ai.difficulty = Difficulty.getDifficulty((int) sliderIA.getValue());
         }
     }

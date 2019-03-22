@@ -2,12 +2,14 @@ package gui.controllers;
 
 import gamestuff.Game;
 import gamestuff.Player;
+import gamestuff.ai.Ai;
+import gamestuff.ai.AiService;
+import gamestuff.ai.Difficulty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import misc.ResourceManager;
 import misc.SaveData;
@@ -74,8 +76,8 @@ public class MenuPrincipalController {
 
         // Parametrage de la partie
         Player currentPlayer;
-        Player player1 = new Player(s_player1, Color.WHITE, false);
-        Player player2 = new Player(s_player2, Color.BLACK, s_ai);
+        Player player1 = new Player(s_player1, false);
+        Player player2 = new Player(s_player2, s_ai);
 
         // On determine quel joueur doit commencer
         currentPlayer = (s_currentPlayer.equals(s_player1)) ? player1 : player2;
@@ -102,6 +104,16 @@ public class MenuPrincipalController {
         int scoreJ2 = mainController.getGame().getBoardGame().calculPiecePlayer2();
         mainController.getGame().getGameController().getLabelScoreJ1().setText(String.valueOf(scoreJ1));
         mainController.getGame().getGameController().getLabelScoreJ2().setText(String.valueOf(scoreJ2));
+
+        if (currentPlayer.isAi()) {
+            mainController.getGame().getGameController().removeOldHint();
+
+            // On indique que l'ia est en train de chercher un coup
+            mainController.getGame().getGameController().getAiIndicator().setVisible(true);
+            Ai.difficulty = Difficulty.NORMAL;
+            AiService aiService = new AiService(-99, -99, mainController.getGame(), mainController.getGame().getGameController(), false);
+            aiService.start();
+        }
     }
 
 

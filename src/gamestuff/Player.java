@@ -1,18 +1,13 @@
 package gamestuff;
 
-import javafx.scene.paint.Color;
-
 public class Player  {
 
     private String name;
     private boolean ai;
-    private Color color;
     private int score;
-    private int wins;
 
-    public Player(String name, Color color, boolean ai) {
+    public Player(String name, boolean ai) {
         this.name = name;
-        this.color = color;
         this.ai = ai;
     }
 
@@ -32,15 +27,6 @@ public class Player  {
         this.ai = ai;
     }
 
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
     public int getScore() {
         return score;
     }
@@ -49,11 +35,4 @@ public class Player  {
         this.score = score;
     }
 
-    public int getWins() {
-        return wins;
-    }
-
-    public void setWins(int wins) {
-        this.wins = wins;
-    }
 }

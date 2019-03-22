@@ -298,6 +298,16 @@ public class BoardGame {
         return newBoard;
     }
 
+    public int[] getFirstPiece(byte value) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == value)
+                    return new int[]{i, j};
+            }
+        }
+        return null;
+    }
+
     /**
      * Affichage du plateau dans la console pour débug
      */
