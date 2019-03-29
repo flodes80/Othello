@@ -215,7 +215,7 @@ public class GameController implements Initializable {
 
         // Partie rouge (affichage dernier pion)
         Cylinder redPart = new Cylinder();
-        redPart.setRadius(32.5);
+        redPart.setRadius(32.2);
         redPart.setHeight(1.0f);
         redPart.setTranslateZ(-30.75f);
         redPart.setRotationAxis(Rotate.X_AXIS);
