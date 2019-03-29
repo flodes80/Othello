@@ -178,8 +178,12 @@ public class GameController implements Initializable {
 
 
     public void addNewDisk(byte value, int colonne, int ligne) {
+        removeAllLastIndicator();
         boolean blackSideUp = value != 0;
-        gridPaneGame.add(createDisk(blackSideUp), colonne, ligne);
+        Group disk = createDisk(blackSideUp);
+        // Affichage comme dernier pion joué via partie rouge du disk
+        disk.getChildren().get(1).setVisible(true);
+        gridPaneGame.add(disk, colonne, ligne);
         soundFlipDisk();
     }
 
@@ -191,6 +195,8 @@ public class GameController implements Initializable {
 
         PhongMaterial blackMaterial = new PhongMaterial(Color.WHITE);
         PhongMaterial whiteMaterial = new PhongMaterial(Color.WHITE);
+        PhongMaterial redMaterial = new PhongMaterial(Color.rgb(231, 025, 0));
+        redMaterial.setSpecularColor(Color.DARKGREY);
 
         Image imageWhite = new Image("img/whiteDisk.png");
         Image imageBlack = new Image("img/blackDisk.png");
@@ -198,6 +204,7 @@ public class GameController implements Initializable {
         whiteMaterial.setDiffuseMap(imageWhite);
         blackMaterial.setDiffuseMap(imageBlack);
 
+        // Partie noire
         Cylinder blackPart = new Cylinder();
         blackPart.setRadius(31);
         blackPart.setHeight(1.0f);
@@ -206,6 +213,17 @@ public class GameController implements Initializable {
         blackPart.setRotate(90.0f);
         blackPart.setMaterial(blackMaterial);
 
+        // Partie rouge (affichage dernier pion)
+        Cylinder redPart = new Cylinder();
+        redPart.setRadius(32.5);
+        redPart.setHeight(1.0f);
+        redPart.setTranslateZ(-30.75f);
+        redPart.setRotationAxis(Rotate.X_AXIS);
+        redPart.setRotate(90.0f);
+        redPart.setMaterial(redMaterial);
+        redPart.setVisible(false);
+
+        // Partie blanche
         Cylinder whitePart = new Cylinder();
         whitePart.setRadius(31);
         whitePart.setHeight(1.0f);
@@ -218,6 +236,7 @@ public class GameController implements Initializable {
             group.setRotate(180.0f);
 
         group.getChildren().add(blackPart);
+        group.getChildren().add(redPart);
         group.getChildren().add(whitePart);
 
         return (group);
@@ -280,6 +299,10 @@ public class GameController implements Initializable {
                 }
             }
         }
+    }
+
+    public void removeAllLastIndicator() {
+        gridPaneGame.getChildren().stream().filter(e -> e instanceof Group).forEach(e -> ((Group) e).getChildren().get(1).setVisible(false));
     }
 
     public void removeAll() {
