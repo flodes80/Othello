@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Ai {
 
-    public static Difficulty difficulty;
+    public static Difficulty difficulty = Difficulty.NORMAL;
 
     /**
      * Cette fonction permet de retourner le "meilleur mouvement" selon l'ia
